@@ -1,0 +1,63 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#eeee"
+    android:orientation="vertical"
+    tools:context="com.xiang.text4.Fragments.FindBookFragment">
+
+    <EditText
+        android:id="@+id/input_book"
+        android:hint="在这里输入书名"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/search_book_chinese_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="中文文献"
+            android:layout_weight="1"/>
+        <Button
+            android:id="@+id/search_book_western_button"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="西文文献" />
+    </LinearLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <ListView
+            android:id="@+id/show_result"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true">
+            <at.markushi.ui.CircleButton
+                android:id="@+id/previous"
+                android:layout_width="64dip"
+                android:layout_height="64dip"
+                android:src="@drawable/ic_keyboard_arrow_left_white_24dp"
+                app:cb_color="#99CC00"
+                app:cb_pressedRingWidth="8dip"
+                android:layout_alignParentLeft="true"/>
+            <at.markushi.ui.CircleButton
+                android:id="@+id/next"
+                android:layout_width="64dip"
+                android:layout_height="64dip"
+                android:src="@drawable/ic_keyboard_arrow_right_white_24dp"
+                app:cb_color="#99CC00"
+                app:cb_pressedRingWidth="8dip"
+                android:layout_alignParentRight="true"/>
+        </RelativeLayout>
+    </RelativeLayout>
+
+
+</LinearLayout>
