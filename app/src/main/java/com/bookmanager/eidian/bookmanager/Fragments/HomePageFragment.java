@@ -1,4 +1,4 @@
-package com.xiang.text4.Fragments;
+package com.bookmanager.eidian.bookmanager.Fragments
 
 
 import android.os.Bundle;
