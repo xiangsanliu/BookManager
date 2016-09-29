@@ -13,7 +13,6 @@ import android.widget.TextView;
 
 import com.bookmanager.eidian.bookmanager.R;
 import com.squareup.picasso.Picasso;
-import com.xiang.text4.Connection;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
