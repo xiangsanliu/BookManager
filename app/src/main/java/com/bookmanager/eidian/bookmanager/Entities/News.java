@@ -1,4 +1,4 @@
-package com.xiang.text4.Entities;
+package com.bookmanager.eidian.bookmanager.Entities;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
