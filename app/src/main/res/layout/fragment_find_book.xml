@@ -4,14 +4,18 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="#eeee"
-    android:orientation="vertical"
-    tools:context="com.xiang.text4.Fragments.FindBookFragment">
+    android:orientation="vertical">
 
-    <EditText
-        android:id="@+id/input_book"
-        android:hint="在这里输入书名"
+    <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content">
+        <EditText
+            android:id="@+id/input_book"
+            android:hint="输入书名后选择搜索中文或英文"
+            android:singleLine="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </android.support.design.widget.TextInputLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

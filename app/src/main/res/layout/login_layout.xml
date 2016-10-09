@@ -6,25 +6,42 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.xiang.text4.Activities.SouthLakeActivity">
+    android:padding="16dp"
+    tools:context="com.bookmanager.eidian.bookmanager.Activities.LoginActivity">
 
-    <EditText
-        android:hint="在这里输入学号"
-        android:textSize="25dp"
+    <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/account"/>
+        app:counterEnabled="true"
+        app:counterMaxLength="13"
+        android:layout_height="wrap_content">
+        <EditText
+            android:hint="在这里输入学号"
+            android:textSize="25dp"
+            android:layout_width="match_parent"
+            android:maxLength="13"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:id="@+id/account"/>
+    </android.support.design.widget.TextInputLayout>
 
-    <EditText
-        android:inputType="textPassword"
-        android:hint="默认密码为学号"
-        android:textSize="25dp"
+    <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/password" />
+        android:layout_height="wrap_content">
+        <EditText
+            android:inputType="textPassword"
+            android:hint="默认密码为学号"
+            android:textSize="25dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:id="@+id/password" />
+    </android.support.design.widget.TextInputLayout>
+
+
     <LinearLayout
+        android:layout_gravity="center"
         android:orientation="horizontal"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
         <LinearLayout

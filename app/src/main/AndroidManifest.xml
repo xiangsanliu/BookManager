@@ -30,7 +30,6 @@
         <activity android:name=".Activities.LoginActivity"
             android:label="登陆"
             android:parentActivityName=".Activities.MainActivity"></activity>
-        <activity android:name=".Activities.NoticeActivity"></activity>
         <activity android:name=".Activities.ShowBookChineseInfo"></activity>
         <activity android:name=".Activities.ShowBookWesternInfo"></activity>
         <activity android:name=".Activities.SouthLakeActivity"
