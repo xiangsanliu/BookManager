@@ -1,12 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.bookmanager.eidian.bookmanager">
+    package="com.xiang.text4">
+
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"></application>
+        android:theme="@style/AppTheme">
+        <activity
+            android:name=".Activities.MainActivity"
+            android:launchMode="singleTop"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.app.default_searchable"
+                android:value=".activitys.SearchBook" />
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".Activities.SouthLakeActivity"
+            android:parentActivityName=".Activities.MainActivity"
+            android:label="南湖跑查询"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".Activities.ActivityContentActivity"
+            android:label="内容"
+            android:parentActivityName=".Activities.MainActivity" />
+        <activity android:name=".Activities.NoticeActivity"></activity>
+        <activity android:name=".Activities.ShowBookChineseInfo"></activity>
+        <activity android:name=".Activities.ShowBookWesternInfo"></activity>
+        <activity
+            android:label="登陆"
+            android:name=".Activities.LoginActivity"
+            android:launchMode="singleTop"
+            android:parentActivityName=".Activities.MainActivity">
+        </activity>
+    </application>
 
 </manifest>
