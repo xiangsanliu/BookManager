@@ -1,6 +1,7 @@
 package com.bookmanager.eidian.bookmanager.Activities;
 
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -98,6 +100,9 @@ public class SouthLakeActivity extends AppCompatActivity implements View.OnClick
 
     @Override
     public void onClick(View v) {
+
+        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(passwordEdit.getWindowToken(), 0);
 
 
         new Thread(new Runnable() {

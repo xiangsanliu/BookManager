@@ -1,6 +1,7 @@
 package com.bookmanager.eidian.bookmanager.Fragments;
 
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -10,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -128,6 +130,10 @@ public class FindBookFragment extends Fragment {
         searchChinese.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                inputMethodManager.hideSoftInputFromWindow(bookEdit.getWindowToken(), 0);
+
                 final String book = bookEdit.getText().toString();
                 page = 1;
                 path = str+"&find_code=WRD&request="+book+"&local_base=HZA01&filter_code_1=WLN&filter_request_1=&filter_code_2=WYR&filter_request_2=&filter_code_3=" +
@@ -174,6 +180,11 @@ public class FindBookFragment extends Fragment {
         searchWestern.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+
+                InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                inputMethodManager.hideSoftInputFromWindow(bookEdit.getWindowToken(), 0);
+
                 final String book = bookEdit.getText().toString();
                 page = 1;
                 final String path2 = str+"&find_code=WRD&request="+book+"&local_base=HZA09&filter_code_1=WLN&filter_request_1=&filter_code_2=WYR&filter_request_2=&filter_code_3=" +
