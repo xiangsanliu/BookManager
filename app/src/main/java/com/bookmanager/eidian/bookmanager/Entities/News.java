@@ -5,7 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.DisplayMetrics;
 
-import com.xiang.text4.Connection;
+import com.bookmanager.eidian.bookmanager.Helpers.Connection;
 
 import java.io.InputStream;
 import java.io.Serializable;

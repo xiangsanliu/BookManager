@@ -11,11 +11,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.xiang.text4.Adapters.NewsAdapter;
-import com.xiang.text4.Adapters.SpacesItemDecoration;
-import com.xiang.text4.Connection;
-import com.xiang.text4.Entities.News;
-import com.xiang.text4.R;
+import com.bookmanager.eidian.bookmanager.Adapters.NewsAdapter;
+import com.bookmanager.eidian.bookmanager.Adapters.SpacesItemDecoration;
+import com.bookmanager.eidian.bookmanager.Entities.News;
+import com.bookmanager.eidian.bookmanager.Helpers.Connection;
+import com.bookmanager.eidian.bookmanager.R;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;

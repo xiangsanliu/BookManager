@@ -1,4 +1,5 @@
-package com.xiang.text4.Activities;
+package com.bookmanager.eidian.bookmanager.Activities;
+
 
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
@@ -14,7 +15,8 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.xiang.text4.R;
+
+import com.bookmanager.eidian.bookmanager.R;
 
 import org.jsoup.Jsoup;
 import org.jsoup.select.Elements;

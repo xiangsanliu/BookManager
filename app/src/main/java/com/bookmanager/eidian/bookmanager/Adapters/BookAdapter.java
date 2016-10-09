@@ -1,4 +1,5 @@
-package com.xiang.text4.Adapters;
+package com.bookmanager.eidian.bookmanager.Adapters;
+
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -7,8 +8,9 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import com.xiang.text4.Entities.Book;
-import com.xiang.text4.R;
+
+import com.bookmanager.eidian.bookmanager.Entities.Book;
+import com.bookmanager.eidian.bookmanager.R;
 
 import java.util.List;
 

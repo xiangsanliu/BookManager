@@ -8,8 +8,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import com.xiang.text4.Entities.Notice;
-import com.xiang.text4.R;
+import com.bookmanager.eidian.bookmanager.Entities.Notice;
+import com.bookmanager.eidian.bookmanager.R;
 
 import java.util.List;
 

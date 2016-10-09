@@ -1,4 +1,5 @@
-package com.xiang.text4;
+package com.bookmanager.eidian.bookmanager.Helpers;
+
 
 /**
  * Created by clmiberf on 2016/9/19.

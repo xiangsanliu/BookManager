@@ -1,4 +1,4 @@
-package com.bookmanager.eidian.bookmanager.Fragments
+package com.bookmanager.eidian.bookmanager.Fragments;
 
 
 import android.os.Bundle;
@@ -7,7 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.xiang.text4.R;
+import com.bookmanager.eidian.bookmanager.R;
+
 
 // 顾名思义，主页的Fragment
 

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.xiang.text4">
+    package="com.bookmanager.eidian.bookmanager">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -23,23 +23,20 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Activities.SouthLakeActivity"
+            android:name=".Activities.ActivityContentActivity"
             android:parentActivityName=".Activities.MainActivity"
             android:label="南湖跑查询"
             android:theme="@style/AppTheme" />
-        <activity
-            android:name=".Activities.ActivityContentActivity"
-            android:label="内容"
-            android:parentActivityName=".Activities.MainActivity" />
+        <activity android:name=".Activities.LoginActivity"
+            android:label="登陆"
+            android:parentActivityName=".Activities.MainActivity"></activity>
         <activity android:name=".Activities.NoticeActivity"></activity>
         <activity android:name=".Activities.ShowBookChineseInfo"></activity>
         <activity android:name=".Activities.ShowBookWesternInfo"></activity>
-        <activity
-            android:label="登陆"
-            android:name=".Activities.LoginActivity"
-            android:launchMode="singleTop"
-            android:parentActivityName=".Activities.MainActivity">
-        </activity>
+        <activity android:name=".Activities.SouthLakeActivity"
+            android:label="南湖跑查询"
+            android:parentActivityName=".Activities.SouthLakeActivity"></activity>
+
     </application>
 
 </manifest>

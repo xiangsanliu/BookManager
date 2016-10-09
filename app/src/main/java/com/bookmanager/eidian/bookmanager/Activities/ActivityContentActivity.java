@@ -15,7 +15,6 @@ import android.widget.TextView;
 import com.bookmanager.eidian.bookmanager.Helpers.Connection;
 import com.bookmanager.eidian.bookmanager.R;
 import com.squareup.picasso.Picasso;
-
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;

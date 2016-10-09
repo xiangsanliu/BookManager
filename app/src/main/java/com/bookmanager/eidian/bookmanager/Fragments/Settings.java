@@ -1,4 +1,5 @@
-package com.xiang.text4.Fragments;
+package com.bookmanager.eidian.bookmanager.Fragments;
+
 
 
 import android.os.Bundle;
@@ -7,7 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.xiang.text4.R;
+import com.bookmanager.eidian.bookmanager.R;
+
 
 /**
  * A simple {@link Fragment} subclass.

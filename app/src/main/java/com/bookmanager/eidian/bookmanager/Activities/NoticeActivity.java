@@ -1,9 +1,11 @@
-package com.xiang.text4.Activities;
+package com.bookmanager.eidian.bookmanager.Activities;
+
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-import com.xiang.text4.R;
+import com.bookmanager.eidian.bookmanager.R;
+
 
 public class NoticeActivity extends AppCompatActivity {
 

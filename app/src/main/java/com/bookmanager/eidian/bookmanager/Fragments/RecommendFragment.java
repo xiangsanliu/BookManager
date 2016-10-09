@@ -1,4 +1,5 @@
-package com.xiang.text4.Fragments;
+package com.bookmanager.eidian.bookmanager.Fragments;
+
 
 import android.content.Context;
 import android.net.Uri;
@@ -8,7 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.xiang.text4.R;
+import com.bookmanager.eidian.bookmanager.R;
+
 
 public class RecommendFragment extends Fragment {
     public RecommendFragment() {

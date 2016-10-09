@@ -13,11 +13,10 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bookmanager.eidian.bookmanager.Activities.ActivityContentActivity;
+import com.bookmanager.eidian.bookmanager.Entities.News;
+import com.bookmanager.eidian.bookmanager.R;
 import com.squareup.picasso.Picasso;
-import com.xiang.text4.Activities.ActivityContentActivity;
-import com.xiang.text4.Connection;
-import com.xiang.text4.Entities.News;
-import com.xiang.text4.R;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package com.xiang.text4.Fragments;
+package com.bookmanager.eidian.bookmanager.Fragments;
 
 
 import android.content.DialogInterface;
@@ -14,8 +14,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.xiang.text4.InternetConnection;
-import com.xiang.text4.R;
+
+import com.bookmanager.eidian.bookmanager.Helpers.InternetConnection;
+import com.bookmanager.eidian.bookmanager.R;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;

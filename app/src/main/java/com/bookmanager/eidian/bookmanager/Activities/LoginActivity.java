@@ -1,4 +1,4 @@
-package com.xiang.text4.Activities;
+package com.bookmanager.eidian.bookmanager.Activities;
 
 import android.app.Activity;
 import android.content.DialogInterface;
@@ -15,10 +15,10 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 
-import com.xiang.text4.BaseActivity;
-import com.xiang.text4.InternetConnection;
-import com.xiang.text4.LibraryList;
-import com.xiang.text4.R;
+import com.bookmanager.eidian.bookmanager.Helpers.BaseActivity;
+import com.bookmanager.eidian.bookmanager.Helpers.InternetConnection;
+import com.bookmanager.eidian.bookmanager.Helpers.LibraryList;
+import com.bookmanager.eidian.bookmanager.R;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;

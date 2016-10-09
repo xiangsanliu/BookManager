@@ -12,11 +12,11 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import com.xiang.text4.Activities.ActivityContentActivity;
-import com.xiang.text4.Adapters.NoticeAdapter;
-import com.xiang.text4.Connection;
-import com.xiang.text4.Entities.Notice;
-import com.xiang.text4.R;
+import com.bookmanager.eidian.bookmanager.Activities.ActivityContentActivity;
+import com.bookmanager.eidian.bookmanager.Adapters.NoticeAdapter;
+import com.bookmanager.eidian.bookmanager.Entities.Notice;
+import com.bookmanager.eidian.bookmanager.Helpers.Connection;
+import com.bookmanager.eidian.bookmanager.R;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;

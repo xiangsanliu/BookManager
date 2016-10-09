@@ -9,7 +9,7 @@ import android.widget.AdapterView;
 import android.widget.TextView;
 
 
-import com.xiang.text4.R;
+import com.bookmanager.eidian.bookmanager.R;
 
 import java.util.List;
 

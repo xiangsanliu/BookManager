@@ -1,4 +1,5 @@
-package com.xiang.text4.Activities;
+package com.bookmanager.eidian.bookmanager.Activities;
+
 
 import android.app.Activity;
 import android.content.Intent;
@@ -8,8 +9,8 @@ import android.os.Message;
 import android.util.Log;
 import android.widget.TextView;
 
-import com.xiang.text4.InternetConnection;
-import com.xiang.text4.R;
+import com.bookmanager.eidian.bookmanager.Helpers.InternetConnection;
+import com.bookmanager.eidian.bookmanager.R;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;

@@ -28,8 +28,21 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bookmanager.eidian.bookmanager.Adapters.MyViewPagerAdapter;
+import com.bookmanager.eidian.bookmanager.DialogFragments.FeedBackDialogFragment;
+import com.bookmanager.eidian.bookmanager.DialogFragments.InfoDialogFragment;
+import com.bookmanager.eidian.bookmanager.Fragments.FindBookFragment;
+import com.bookmanager.eidian.bookmanager.Fragments.HomePageFragments.ActivityForecastFragment;
+import com.bookmanager.eidian.bookmanager.Fragments.HomePageFragments.NewsFragment;
+import com.bookmanager.eidian.bookmanager.Fragments.HomePageFragments.NoticeFragment;
+import com.bookmanager.eidian.bookmanager.Fragments.MyLibraryFragment;
+import com.bookmanager.eidian.bookmanager.Fragments.ReaderForumFragment;
+import com.bookmanager.eidian.bookmanager.Fragments.RecommendFragment;
+import com.bookmanager.eidian.bookmanager.Fragments.Settings;
 import com.bookmanager.eidian.bookmanager.Helpers.ActivityCollector;
 import com.bookmanager.eidian.bookmanager.Helpers.BaseActivity;
+import com.bookmanager.eidian.bookmanager.Helpers.InternetConnection;
+import com.bookmanager.eidian.bookmanager.Helpers.LibraryList;
 import com.bookmanager.eidian.bookmanager.R;
 
 import org.jsoup.Jsoup;

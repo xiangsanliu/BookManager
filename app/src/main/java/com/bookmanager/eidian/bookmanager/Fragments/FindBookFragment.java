@@ -1,4 +1,4 @@
-package com.xiang.text4.Fragments;
+package com.bookmanager.eidian.bookmanager.Fragments;
 
 
 import android.content.Intent;
@@ -15,12 +15,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
-import com.xiang.text4.Activities.ShowBookChineseInfo;
-import com.xiang.text4.Activities.ShowBookWesternInfo;
-import com.xiang.text4.Adapters.BookAdapter;
-import com.xiang.text4.Entities.Book;
-import com.xiang.text4.InternetConnection;
-import com.xiang.text4.R;
+import com.bookmanager.eidian.bookmanager.Activities.ShowBookChineseInfo;
+import com.bookmanager.eidian.bookmanager.Activities.ShowBookWesternInfo;
+import com.bookmanager.eidian.bookmanager.Adapters.BookAdapter;
+import com.bookmanager.eidian.bookmanager.Entities.Book;
+import com.bookmanager.eidian.bookmanager.Helpers.InternetConnection;
+import com.bookmanager.eidian.bookmanager.R;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -29,6 +29,8 @@ import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import at.markushi.ui.CircleButton;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -51,9 +53,9 @@ public class FindBookFragment extends Fragment {
 
     private String path;
 
-    private Button previous;
+    private CircleButton previous;
 
-    private Button next;
+    private CircleButton next;
     //记录第几页
     int page = 1;
 
@@ -68,7 +70,7 @@ public class FindBookFragment extends Fragment {
                         @Override
                         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                             Book book = bookList.get(i);
-                            Intent intent = new Intent(getActivity(),ShowBookChineseInfo.class);
+                            Intent intent = new Intent(getActivity(), ShowBookChineseInfo.class);
                             intent.putExtra("path",path);
                             intent.putExtra("titleUrl",book.getTitleUrl());
                             startActivity(intent);
@@ -111,8 +113,8 @@ public class FindBookFragment extends Fragment {
         bookEdit = (EditText) view.findViewById(R.id.input_book);
         searchChinese = (Button) view.findViewById(R.id.search_book_chinese_button);
         searchWestern = (Button) view.findViewById(R.id.search_book_western_button);
-        previous = (Button) view.findViewById(R.id.previous);
-        next = (Button) view.findViewById(R.id.next);
+        previous = (CircleButton) view.findViewById(R.id.previous);
+        next = (CircleButton) view.findViewById(R.id.next);
         listView = (ListView) view.findViewById(R.id.show_result);
 
         //接受传来的数据

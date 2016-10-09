@@ -1,4 +1,5 @@
-package com.xiang.text4.Entities;
+package com.bookmanager.eidian.bookmanager.Entities;
+
 
 /**
  * Created by clmiberf on 2016/9/21.
