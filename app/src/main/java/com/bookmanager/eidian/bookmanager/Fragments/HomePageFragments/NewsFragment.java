@@ -13,6 +13,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.bookmanager.eidian.bookmanager.Adapters.NewsAdapter;
 import com.bookmanager.eidian.bookmanager.Adapters.SpacesItemDecoration;
@@ -52,6 +53,8 @@ public class NewsFragment extends Fragment {
                     adapter=new NewsAdapter(object,getActivity());
                     recyclerView.setAdapter(adapter);
                     swipeRefreshLayout.setRefreshing(false);
+                    Toast.makeText(getActivity(), "数据刷新成功", Toast.LENGTH_SHORT).show();
+
             }
         }
     };

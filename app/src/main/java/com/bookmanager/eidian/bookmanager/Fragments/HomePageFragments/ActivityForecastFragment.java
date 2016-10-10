@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.bookmanager.eidian.bookmanager.Activities.ActivityContentActivity;
 import com.bookmanager.eidian.bookmanager.Adapters.ActivitiesAdapter;
@@ -48,7 +49,8 @@ public class ActivityForecastFragment extends Fragment {
                     Object newsResponse = msg.obj;
                     final ActivitiesAdapter activitiesAdapter = new ActivitiesAdapter(getActivity(), R.layout.activities_item, (List<Activities>) newsResponse );
                     listView.setAdapter(activitiesAdapter);
-                    swipeRefreshLayout.setRefreshing(!swipeRefreshLayout.isRefreshing());
+                    swipeRefreshLayout.setRefreshing(false);
+                    Toast.makeText(getActivity(), "数据刷新成功", Toast.LENGTH_SHORT).show();
                     listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

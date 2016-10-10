@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.bookmanager.eidian.bookmanager.Activities.ActivityContentActivity;
 import com.bookmanager.eidian.bookmanager.Adapters.NoticeAdapter;
@@ -66,6 +67,8 @@ public class NoticeFragment extends Fragment {
                             }
                         }
                     });
+                    Toast.makeText(getActivity(), "数据刷新成功", Toast.LENGTH_SHORT).show();
+
 
             }
         }

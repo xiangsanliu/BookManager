@@ -1,11 +1,14 @@
 package com.bookmanager.eidian.bookmanager.Adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +23,8 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+import static java.security.AccessController.getContext;
+
 /**
  * Created by lune on 2016/9/22.
  */
@@ -27,11 +32,11 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
 
 
     private List<News> newses;
-    private Context context;
+    private Activity activity;
 
-    public NewsAdapter(List<News> newses, Context context) {
+    public NewsAdapter(List<News> newses, Activity activity) {
         this.newses = newses;
-        this.context=context;
+        this.activity=activity;
     }
 
 
@@ -58,7 +63,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
     }
     @Override
     public NewsViewHolder onCreateViewHolder(ViewGroup viewGroup, int position) {
-        View v= LayoutInflater.from(context).inflate(R.layout.news_item,viewGroup,false);
+        View v= LayoutInflater.from(activity).inflate(R.layout.news_item,viewGroup,false);
         NewsViewHolder nvh=new NewsViewHolder(v);
         return nvh;
     }
@@ -71,22 +76,27 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
     @Override
     public void onBindViewHolder(NewsViewHolder personViewHolder, final int position) {
         final int j=position;
-
+        DisplayMetrics metric = new DisplayMetrics();
+        activity.getWindowManager().getDefaultDisplay().getMetrics(metric);
+        int width = metric.widthPixels;  // 屏幕宽度（像素）
+        int height = metric.heightPixels;
+        Log.d("width", width+"");
+        Log.d("width", height+"");
         personViewHolder.news_title.setText(newses.get(position).getTitle());
         Picasso.with(personViewHolder.news_enter.getContext()).load(newses.get(position)
-                .getPhotoUrl()).resize(720,300).centerCrop().into(personViewHolder.news_enter);
+                .getPhotoUrl()).resize(width,height/4).centerCrop().into(personViewHolder.news_enter);
 
         //为btn_share btn_readMore cardView设置点击事件
         personViewHolder.cardView.setOnClickListener(new View.OnClickListener() {
             String flag = "NewsFragment";
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(context,ActivityContentActivity.class);
+                Intent intent=new Intent(activity,ActivityContentActivity.class);
                 intent.putExtra("url",newses.get(position).getUrl()); //当前点击的新闻传递给新闻显示界面
                 intent.putExtra("photoUrl", newses.get(position).getPhotoUrl());
                 intent.putExtra("fragmentCode", flag);
                 intent.putExtra("newsTitle", newses.get(position).getTitle());
-                context.startActivity(intent);
+                activity.startActivity(intent);
             }
         });
 
