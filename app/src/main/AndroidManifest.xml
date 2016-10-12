@@ -42,7 +42,8 @@
         <activity android:name=".Activities.SouthLakeActivity"
             android:label="南湖跑查询"
             android:parentActivityName=".Activities.SouthLakeActivity"></activity>
-
+        <activity android:name=".Activities.Show_new_book_message"></activity>
+        <activity android:name=".Activities.Show_rank_book_message"></activity>
     </application>
 
 </manifest>

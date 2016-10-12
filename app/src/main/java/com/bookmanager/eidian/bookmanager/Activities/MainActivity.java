@@ -35,9 +35,9 @@ import com.bookmanager.eidian.bookmanager.Fragments.FindBookFragment;
 import com.bookmanager.eidian.bookmanager.Fragments.HomePageFragments.ActivityForecastFragment;
 import com.bookmanager.eidian.bookmanager.Fragments.HomePageFragments.NewsFragment;
 import com.bookmanager.eidian.bookmanager.Fragments.HomePageFragments.NoticeFragment;
+import com.bookmanager.eidian.bookmanager.Fragments.HotMessageFragment;
 import com.bookmanager.eidian.bookmanager.Fragments.MyLibraryFragment;
 import com.bookmanager.eidian.bookmanager.Fragments.ReaderForumFragment;
-import com.bookmanager.eidian.bookmanager.Fragments.RecommendFragment;
 import com.bookmanager.eidian.bookmanager.Fragments.Settings;
 import com.bookmanager.eidian.bookmanager.Helpers.ActivityCollector;
 import com.bookmanager.eidian.bookmanager.Helpers.BaseActivity;
@@ -73,6 +73,7 @@ public class MainActivity extends BaseActivity
     private String search;
     private List<String> list;
     private String myLibrary1;
+    private String hotMessage;
     private String str;
     private SharedPreferences pref;
     private LibraryList myLibrary = new LibraryList();
@@ -260,7 +261,7 @@ public class MainActivity extends BaseActivity
         if (isLogined && !isAutoLogin) {
             search = intent.getStringExtra("search");
             myLibrary1 = intent.getStringExtra("myLibrary");
-//        String hotMessage = intent.getStringExtra("hotMeesage");
+            hotMessage = intent.getStringExtra("hotMessage");
 //        String reader = intent.getStringExtra("reader");
 //        String history = intent.getStringExtra("history");
             //获取相同的参数
@@ -419,8 +420,12 @@ public class MainActivity extends BaseActivity
             mViewPager.setVisibility(View.GONE);
             showSearchButton = false;
             actionBar.setTitle("推荐书籍");
-            Fragment recommendFragment = new RecommendFragment();
-            transaction.replace(R.id.content, recommendFragment, "FinishTag").commit();
+            Fragment hotMessageFragment = new HotMessageFragment();
+            Bundle bundle = new Bundle();
+            bundle.putString("str",str);
+            bundle.putString("myLibrary",hotMessage);
+            hotMessageFragment.setArguments(bundle);
+            transaction.replace(R.id.content, hotMessageFragment, "FinishTag").commit();
         } else if (id == R.id.reader_forum) {
             mTabLayout.setVisibility(View.GONE);
             mViewPager.setVisibility(View.GONE);

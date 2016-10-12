@@ -52,11 +52,22 @@ public class ShowBookWesternInfo extends Activity {
                 StringBuilder sb = new StringBuilder();
                 Log.d("ShowWesternInfo1", String.valueOf(elements.size()));
                 Log.d("ShowWesternInfo2",elements.text());
-                sb.append("题名: "+elements.get(1));
+                for (int i =0;i<elements.size();i+=2) {
+                    Log.d("ShowBookChineseInfo2", ","+elements.get(i).text()+",");
+                    if (elements.get(i).text().equals("题名  ")){
+                        sb.append("题名: "+elements.get(i+1).text()+"\n");
+                    }else if (elements.get(i).text().equals("出版发行  ")){
+                        sb.append("出版社: "+elements.get(i+1).text()+"\n");
+                    }else if (elements.get(i).text().equals("载体形态  ")){
+                        sb.append("载体: "+elements.get(i+1).text()+"\n");
+                    }else if (elements.get(i).text().equals("摘要  ")){
+                        sb.append("摘要: "+elements.get(i+1).text()+"\n");
+                    }
+                }
 
                 Message message = new Message();
                 message.what = SHOW;
-                message.obj = elements.toString();
+                message.obj = sb.toString();
                 handler.sendMessage(message);
             }
         }).start();

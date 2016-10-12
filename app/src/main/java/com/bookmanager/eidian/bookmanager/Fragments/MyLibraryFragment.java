@@ -114,16 +114,18 @@ public class MyLibraryFragment extends Fragment {
                     int totalBorrow = elements1.size();
                     int iBorrow = 1;
                     while (iBorrow < totalBorrow) {
-                        String no = elements1.get(1).text();
-                        String author = elements1.get(3).text();
-                        String bName = elements1.get(4).text();
-                        String year = elements1.get(5).text();
-                        String deadline = elements1.get(6).text();
-                        String fine = elements1.get(7).text();
-                        String callNumber = elements1.get(9).text();
+                        String no = elements1.get(iBorrow+0).text();
+                        Log.d("222222",no+"");
+
+                        String author = elements1.get(iBorrow+2).text();
+                        String bName = elements1.get(iBorrow+3).text();
+                        String year = elements1.get(iBorrow+4).text();
+                        String deadline = elements1.get(iBorrow+5).text();
+                        String fine = elements1.get(iBorrow+6).text();
+                        String callNumber = elements1.get(iBorrow+8).text();
                         sbl = new StringBuilder();
                         sbl.append("\n")
-                                .append("NO." + no).append("\n")
+                                .append("NO." + no+"").append("\n")
                                 .append("作者: " + author).append("\n")
                                 .append("书名: " + bName).append("\n")
                                 .append("出版年: " + year).append("\n")
@@ -132,7 +134,7 @@ public class MyLibraryFragment extends Fragment {
                                 .append("索书号: " + callNumber).append("\n");
                         Log.d("Borrowing", sbl.toString());
                         contentList.add(sbl.toString());
-                        iBorrow += 14;
+                        iBorrow += 11;
                     }
                     Log.d("Library3", elements1.text());
                     contentList.add("当前在借书籍:");
@@ -185,7 +187,7 @@ public class MyLibraryFragment extends Fragment {
                     al++;
 
                 }
-                Log.d("0999999090909090", "77777777777");
+                Log.d("0999999090909090", contentList.toString());
                 Message message = new Message();
                 message.what = SHOW_RESPONSE;
                 message.obj = contentList.toString();
