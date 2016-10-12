@@ -12,9 +12,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 
+import com.bookmanager.eidian.bookmanager.Activities.BorrowingContent;
+import com.bookmanager.eidian.bookmanager.Activities.MyLibraryContent;
 import com.bookmanager.eidian.bookmanager.Helpers.InternetConnection;
 import com.bookmanager.eidian.bookmanager.R;
 
@@ -31,11 +34,18 @@ import java.util.List;
  */
 public class MyLibraryFragment extends Fragment {
 
-    private TextView showInfo;
+    private TextView money;
+    private Button borrowing_num;
+    private Button history_num;
+    private Button booked_num;
+    private Button pre_num;
 
     private List<String> contentList ;
 
+    private String[] content = new String[10];
+
     static  final  int SHOW_RESPONSE = 0;
+
 
     //当未获取到myLibrary信息时
     int al=0;
@@ -45,9 +55,48 @@ public class MyLibraryFragment extends Fragment {
         public void handleMessage(Message message){
             switch (message.what){
                 case SHOW_RESPONSE:
-                    String show = String.valueOf(message.obj);
+                    String show[] ;
+                    show = (String[]) message.obj;
                     if (show != null){
-                        showInfo.setText(show);
+                        money.setText(show[0]);
+                        borrowing_num.setText(show[1]);
+                        history_num.setText(show[2]);
+                        booked_num.setText(show[3]);
+                        pre_num.setText(show[4]);
+                        borrowing_num.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent intent = new Intent(getActivity(), BorrowingContent.class);
+                                intent.putExtra("url", content[5]);
+                                startActivity(intent);
+                            }
+                        });
+                        history_num.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent intent = new Intent(getActivity(), MyLibraryContent.class);
+                                intent.putExtra("url", content[6]);
+                                startActivity(intent);
+                            }
+                        });
+                        booked_num.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent intent = new Intent(getActivity(), MyLibraryContent.class);
+                                intent.putExtra("url", content[7]);
+                                startActivity(intent);
+                            }
+                        });
+                        pre_num.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent intent = new Intent(getActivity(), MyLibraryContent.class);
+                                intent.putExtra("url", content[8]);
+                                startActivity(intent);
+                            }
+                        });
+
+
                     }else{
                         dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                             @Override
@@ -71,7 +120,12 @@ public class MyLibraryFragment extends Fragment {
         // Inflate the layout for this fragment
         View view =  inflater.inflate(R.layout.fragment_my_library, container, false);
 
-        showInfo = (TextView) view.findViewById(R.id.show_mylibrary);
+        money = (TextView) view.findViewById(R.id.money);
+        borrowing_num = (Button) view.findViewById(R.id.borrowing_num);
+        history_num = (Button) view.findViewById(R.id.history_num);
+        booked_num = (Button) view.findViewById(R.id.booked_num);
+        pre_num = (Button) view.findViewById(R.id.pre_num);
+
         Bundle bundle = getArguments();
         final String myLibrary1 = bundle.getString("myLibrary");
         final String str = bundle.getString("str");
@@ -85,110 +139,35 @@ public class MyLibraryFragment extends Fragment {
                 contentList = new ArrayList<String>();
                 InternetConnection in = new InternetConnection(myLibrary1, myLibrary1);
                 String response = in.getResponse();
-                Log.d("Library1", response.toString());
+                Log.d("Library1", myLibrary1);
                 if (response != null) {
                     Document document = Jsoup.parse(response);
-                    //获取外借书籍欠款金额
-                    Element element3 = document.select("td.td1").last();
-//                        StringBuilder borrowingfine = new StringBuilder();
-//                        borrowingfine.append("外借书籍当前欠款金额: "+element3.text());
-                    contentList.add("外借书籍当前欠款金额: " + element3.text());
-                    Log.d("Library8", element3.text());
-                }else{
-                    dialog.setMessage("未获取到欠款信息"+"\n");
-                    al++;
-                }
-
-                //获取在借书籍
-                String pathBorrow = str + "bor-loan&adm_library=HZA50";
-                InternetConnection it = new InternetConnection(pathBorrow, myLibrary1);
-                Log.d("debug_path", pathBorrow);
-
-                Log.d("Library2", it.getResponse());
-                if (!it.getResponse().isEmpty()) {
-                    Document document1 = Jsoup.parse(it.getResponse());
-
-                    Elements elements1 = document1.select("td.td1");
-                    //获得elements1的size
-                    StringBuilder sbl;         //存放每本书的信息
-                    int totalBorrow = elements1.size();
-                    int iBorrow = 1;
-                    while (iBorrow < totalBorrow) {
-                        String no = elements1.get(1).text();
-                        String author = elements1.get(3).text();
-                        String bName = elements1.get(4).text();
-                        String year = elements1.get(5).text();
-                        String deadline = elements1.get(6).text();
-                        String fine = elements1.get(7).text();
-                        String callNumber = elements1.get(9).text();
-                        sbl = new StringBuilder();
-                        sbl.append("\n")
-                                .append("NO." + no).append("\n")
-                                .append("作者: " + author).append("\n")
-                                .append("书名: " + bName).append("\n")
-                                .append("出版年: " + year).append("\n")
-                                .append("应还时期: " + deadline).append("\n")
-                                .append("罚款: " + fine).append("\n")
-                                .append("索书号: " + callNumber).append("\n");
-                        Log.d("Borrowing", sbl.toString());
-                        contentList.add(sbl.toString());
-                        iBorrow += 14;
+//                    Elements elements = document.select("td.td1");
+//                    Elements elements1 = elements.get(0).getElementsByTag("td");
+//                    Log.d("myLibrary", elements1.get(0).getElementsByTag("a").attr("href"));
+//                    String s = document.select("td.td1").get(0).getElementsByTag("td").get(0).getElementsByTag("a").attr("href");
+//                    s= s.substring(24, s.length()-3);
+//                    Log.d("myLibrary", s);
+                    String url;
+                    content[0] = "当前过期外借欠款："+ document.select("td.td1").last().text();
+                    content[1] = "当前在借书籍数：" + document.select("td.td1").get(0).text();
+                    content[2] = "历史借阅书籍数：" + document.select("td.td1").get(1).text();
+                    content[3] = "预约请求：" + document.select("td.td1").get(2).text();
+                    content[4] = "预定请求：" + document.select("td.td1").get(3).text();
+                    for (int i = 1;i<=4;i++) {
+                        url = document.select("td.td1").get(i-1).getElementsByTag("td").get(0).getElementsByTag("a").attr("href");
+                        content[4+i] = url.substring(24, url.length()-3);
+                        Log.d("url", 4+i+" "+url.substring(24, url.length()-3));
                     }
-                    Log.d("Library3", elements1.text());
-                    contentList.add("当前在借书籍:");
-                    contentList.add("NO.   著者   题名   出版年   应还日期   罚款   索书号");
+
                 }else{
-                    dialog.setMessage("未获取到当前借书信息"+"\n");
+                    dialog.setMessage("我的图书馆内容获取失败"+"\n");
                     al++;
                 }
 
-                //获取借阅历史
-                String pathBorrowed = str + "bor-history-loan&adm_library=HZA50";
-                Log.d("Path", pathBorrowed);
-                InternetConnection inc = new InternetConnection(pathBorrowed, myLibrary1);
-                if (!inc.getResponse().isEmpty()) {
-                    Document document2 = Jsoup.parse(inc.getResponse());
-                    Elements elements2 = document2.getElementsByTag("table");
-                    Log.d("Library", elements2.get(1).text());
-                    Elements element = document2.select("td.td1");
-                    Log.d("LibraryPathBorrowed", element.text());
-                    StringBuilder sb;
-                    Log.d("Math", String.valueOf(element.size()));
-                    int total = element.size();
-                    int i = 1;
-                    while (i < total) {
-                        String no = element.get(i).text();
-                        String author = element.get(i + 1).text();
-                        String bName = element.get(i + 2).text();
-                        String year = element.get(i + 3).text();
-                        String deadline = element.get(i + 4).text();
-                        String shouldRetime = element.get(i + 5).text();
-                        String reDate = element.get(i + 6).text();
-                        String reTime = element.get(i + 7).text();
-//                            String fine = element.get(i+8).text();
-                        sb = new StringBuilder();
-                        Log.d("Library4", String.valueOf(i));
-                        sb.append("No." + no).append("\n")
-                                .append("著者: " + author).append("\n")
-                                .append("书名: " + bName).append("\n")
-                                .append("出版年份: " + year).append("\n")
-                                .append("应还时间: " + deadline + " " + shouldRetime).append("\n")
-                                .append("归还时间: " + reDate + " " + reTime).append("\n");
-                        Log.d("09u8798887uhhkkjh", sb.toString());
-                        contentList.add(sb.toString());
-                        Log.d("Library7", String.valueOf(contentList.size()));
-                        i += 10;
-                    }
-                }else {
-                    dialog.setMessage("未获取到历史借书信息"+"\n");
-                    dialog.setCancelable(false);
-                    al++;
-
-                }
-                Log.d("0999999090909090", "77777777777");
                 Message message = new Message();
                 message.what = SHOW_RESPONSE;
-                message.obj = contentList.toString();
+                message.obj = content;
                 handler.sendMessage(message);
 
             }

@@ -96,7 +96,6 @@ public class ActivityContentActivity extends AppCompatActivity {
                     Elements date = document.select("h5.hn_news_subtitle");
                     String str = date.text();
                     str = str.substring(0,17);
-                    Log.d("date", str);
 
                     Elements element = elements.get(0).getElementsByTag("p");
                     String content = "";

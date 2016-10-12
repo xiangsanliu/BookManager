@@ -5,11 +5,11 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <supports-screens
-        android:smallScreens="true"
-        android:normalScreens="true"
+        android:anyDensity="true"
         android:largeScreens="true"
+        android:normalScreens="true"
         android:resizeable="true"
-        android:anyDensity="true" />
+        android:smallScreens="true" />
 
     <application
         android:allowBackup="true"
@@ -24,25 +24,30 @@
             <meta-data
                 android:name="android.app.default_searchable"
                 android:value=".activitys.SearchBook" />
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".Activities.ActivityContentActivity"
+            android:label="南湖跑查询"
             android:parentActivityName=".Activities.MainActivity"
-            android:label="南湖跑查询"
             android:theme="@style/AppTheme" />
-        <activity android:name=".Activities.LoginActivity"
+        <activity
+            android:name=".Activities.LoginActivity"
             android:label="登陆"
-            android:parentActivityName=".Activities.MainActivity"></activity>
-        <activity android:name=".Activities.ShowBookChineseInfo"></activity>
-        <activity android:name=".Activities.ShowBookWesternInfo"></activity>
-        <activity android:name=".Activities.SouthLakeActivity"
+            android:parentActivityName=".Activities.MainActivity" />
+        <activity android:name=".Activities.ShowBookChineseInfo" />
+        <activity android:name=".Activities.ShowBookWesternInfo" />
+        <activity
+            android:name=".Activities.SouthLakeActivity"
             android:label="南湖跑查询"
-            android:parentActivityName=".Activities.SouthLakeActivity"></activity>
-
+            android:parentActivityName=".Activities.SouthLakeActivity" />
+        <activity android:name=".Activities.MyLibraryContent" />
+        <activity android:name=".Activities.BorrowingContent"></activity>
     </application>
 
 </manifest>

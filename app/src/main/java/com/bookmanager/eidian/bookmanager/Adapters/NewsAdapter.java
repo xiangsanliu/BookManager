@@ -46,8 +46,6 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
         CardView cardView;
         TextView news_title;
         ImageView news_enter;
-        Button share;
-        Button readMore;
 
         public NewsViewHolder(final View itemView) {
             super(itemView);
@@ -80,8 +78,6 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
         activity.getWindowManager().getDefaultDisplay().getMetrics(metric);
         int width = metric.widthPixels;  // 屏幕宽度（像素）
         int height = metric.heightPixels;
-        Log.d("width", width+"");
-        Log.d("width", height+"");
         personViewHolder.news_title.setText(newses.get(position).getTitle());
         Picasso.with(personViewHolder.news_enter.getContext()).load(newses.get(position)
                 .getPhotoUrl()).resize(width,height/4).centerCrop().into(personViewHolder.news_enter);
