@@ -86,7 +86,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                         intent.putExtra("search", list.get(4));
                         intent.putExtra("myLibrary", list.get(0));
-                        intent.putExtra("hotMeesage", list.get(1));
+                        intent.putExtra("hotMessage", list.get(1));
                         intent.putExtra("reader", list.get(2));
                         intent.putExtra("history", list.get(3));
                         intent.putExtra("isLogined", true);
