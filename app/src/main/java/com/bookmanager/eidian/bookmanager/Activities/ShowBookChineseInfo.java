@@ -10,6 +10,7 @@ import android.util.Log;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.bookmanager.eidian.bookmanager.Helpers.BaseActivity;
 import com.bookmanager.eidian.bookmanager.Helpers.InternetConnection;
 import com.bookmanager.eidian.bookmanager.R;
 
@@ -20,7 +21,7 @@ import org.jsoup.select.Elements;
 /**
  * Created by clmiberf on 2016/9/22.
  */
-public class ShowBookChineseInfo extends Activity {
+public class ShowBookChineseInfo extends BaseActivity {
 
     static final int SHOW_CHINESE_INFO = 0;
 

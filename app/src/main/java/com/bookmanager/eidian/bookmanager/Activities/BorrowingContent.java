@@ -11,6 +11,7 @@ import android.util.Log;
 import com.bookmanager.eidian.bookmanager.Adapters.MyLibraryBookAdapter;
 import com.bookmanager.eidian.bookmanager.Adapters.SpacesItemDecoration;
 import com.bookmanager.eidian.bookmanager.Entities.MyLibraryBook;
+import com.bookmanager.eidian.bookmanager.Helpers.BaseActivity;
 import com.bookmanager.eidian.bookmanager.Helpers.InternetConnection;
 import com.bookmanager.eidian.bookmanager.R;
 
@@ -21,7 +22,7 @@ import org.jsoup.select.Elements;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BorrowingContent extends AppCompatActivity {
+public class BorrowingContent extends BaseActivity {
 
     RecyclerView recyclerView;
     private MyLibraryBookAdapter adapter;
@@ -57,12 +58,14 @@ public class BorrowingContent extends AppCompatActivity {
                 Elements elements = document.select("td.td1");
                 list = new ArrayList<MyLibraryBook>();
                 for (int i = 1 ;i<elements.size();i+=11){
+                    String url = elements.get(i).select("A").attr("HREF");
+                    String book_url = elements.get(i+3).select("a").attr("href");
                     String author = elements.get(i+2).text();
                     String bookName = elements.get(i+3).text();
                     String bookYear = elements.get(i+4).text();
                     String should_date = elements.get(i+5).text();
                     String lib = elements.get(i+7).text();
-                    list.add(new MyLibraryBook(author, bookName, bookYear, should_date, lib));
+                    list.add(new MyLibraryBook(author, bookName, bookYear, should_date, "尚未归还", lib, url, book_url));
                 }
                 Message message = new Message();
                 message.obj = list;

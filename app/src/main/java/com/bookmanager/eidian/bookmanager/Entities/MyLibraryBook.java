@@ -11,14 +11,30 @@ public class MyLibraryBook {
     private String should_date;
     private String returned_date = " ";
     private String lib;
+    private String url;
+    private String book_url;
 
-    public MyLibraryBook(String author, String bookName, String year, String should_date, String returned_date, String lib) {
+
+    public String getUrl() {
+
+        return url;
+    }
+
+
+    public String getBook_url() {
+        return book_url;
+    }
+
+    public MyLibraryBook(String author, String bookName, String year, String should_date, String returned_date, String lib, String url, String book_url) {
         this.author = author;
         this.bookName = bookName;
         this.year = year;
+
         this.should_date = should_date;
         this.returned_date = returned_date;
         this.lib = lib;
+        this.url = url;
+        this.book_url = book_url;
     }
 
     public String getAuthor() {

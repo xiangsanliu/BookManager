@@ -46,8 +46,19 @@
             android:name=".Activities.SouthLakeActivity"
             android:label="南湖跑查询"
             android:parentActivityName=".Activities.SouthLakeActivity" />
-        <activity android:name=".Activities.MyLibraryContent" />
-        <activity android:name=".Activities.BorrowingContent"></activity>
+        <activity
+            android:name=".Activities.MyLibraryContent"
+            android:parentActivityName=".Activities.MainActivity" />
+        <activity
+            android:name=".Activities.BorrowingContent"
+            android:parentActivityName=".Activities.MainActivity" />
+        <activity
+            android:name=".Activities.Show_new_book_message"
+            android:parentActivityName=".Activities.MainActivity" />
+        <activity
+            android:name=".Activities.Show_rank_book_message"
+            android:parentActivityName=".Activities.MainActivity" />
+        <activity android:name=".Activities.BorrowingBookImformation"></activity>
     </application>
 
 </manifest>

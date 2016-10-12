@@ -12,9 +12,11 @@ import android.util.Log;
 import com.bookmanager.eidian.bookmanager.Adapters.MyLibraryBookAdapter;
 import com.bookmanager.eidian.bookmanager.Adapters.SpacesItemDecoration;
 import com.bookmanager.eidian.bookmanager.Entities.MyLibraryBook;
+import com.bookmanager.eidian.bookmanager.Helpers.BaseActivity;
 import com.bookmanager.eidian.bookmanager.Helpers.InternetConnection;
 import com.bookmanager.eidian.bookmanager.R;
 
+import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -23,7 +25,7 @@ import org.jsoup.select.Elements;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MyLibraryContent extends AppCompatActivity {
+public class MyLibraryContent extends BaseActivity {
 
     RecyclerView recyclerView;
     private MyLibraryBookAdapter adapter;
@@ -61,11 +63,12 @@ public class MyLibraryContent extends AppCompatActivity {
                 for (int i = 1 ;i<elements.size();i+=10){
                     String author = elements.get(i+1).text();
                     String bookName = elements.get(i+2).text();
+                    String book_url = elements.get(i+2).select("a").attr("href");
                     String bookYear = elements.get(i+3).text();
                     String should_date = elements.get(i+4).text();
                     String returned_date = elements.get(i+6).text();
                     String lib = elements.get(i+9).text();
-                    list.add(new MyLibraryBook(author, bookName, bookYear, should_date, returned_date, lib));
+                    list.add(new MyLibraryBook(author, bookName, bookYear, should_date, returned_date, lib, "a", book_url));
                 }
                 Message message = new Message();
                 message.obj = list;

@@ -8,6 +8,7 @@ import android.os.Message;
 import android.util.Log;
 import android.widget.TextView;
 
+import com.bookmanager.eidian.bookmanager.Helpers.BaseActivity;
 import com.bookmanager.eidian.bookmanager.Helpers.InternetConnection;
 import com.bookmanager.eidian.bookmanager.R;
 
@@ -17,7 +18,7 @@ import org.jsoup.select.Elements;
 /**
  * Created by clmiberf on 2016/9/26.
  */
-public class Show_new_book_message extends Activity {
+public class Show_new_book_message extends BaseActivity {
 
     static  final int SHOW_RESPONSE = 0;
 
@@ -40,12 +41,10 @@ public class Show_new_book_message extends Activity {
         view = (TextView) findViewById(R.id.show_new_book_msg);
         Intent intent = getIntent();
         final String path = intent.getStringExtra("pathUrl");
-        Log.d("Show_new_book_message",path);
         new Thread(new Runnable() {
             @Override
             public void run() {
                 InternetConnection in = new InternetConnection(path,path);
-                Log.d("Show_new_book_message",in.getResponse());
 
                 org.jsoup.nodes.Document document = Jsoup.parse(in.getResponse());
 
@@ -55,7 +54,6 @@ public class Show_new_book_message extends Activity {
                 StringBuilder builder = new StringBuilder();
 
                 for(int i = 1;i<elements.size();i++){
-                    Log.d("5555555555",","+elements.get(i).text()+",");
                     if (elements.get(i).text().equals("题名  ")){
                         builder.append("题名: "+elements.get(i+1).text()).append("\n");
                     }else if (elements.get(i).text().equals("出版发行  ")){

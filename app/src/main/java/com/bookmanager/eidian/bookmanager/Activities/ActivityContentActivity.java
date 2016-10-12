@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bookmanager.eidian.bookmanager.Helpers.BaseActivity;
 import com.bookmanager.eidian.bookmanager.Helpers.Connection;
 import com.bookmanager.eidian.bookmanager.R;
 import com.squareup.picasso.Picasso;
@@ -24,7 +25,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 
-public class ActivityContentActivity extends AppCompatActivity {
+public class ActivityContentActivity extends BaseActivity {
 
     private static final int SHOW_RESPONSE = 0;
     String u;

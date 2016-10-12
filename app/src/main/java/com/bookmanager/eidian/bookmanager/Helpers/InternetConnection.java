@@ -48,7 +48,6 @@ public class InternetConnection {
                 }
                 response = str.toString();
 
-                Log.d("InternetConnection",str.toString());
             }
         } catch (MalformedURLException e) {
             e.printStackTrace();

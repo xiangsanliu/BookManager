@@ -2,6 +2,7 @@ package com.bookmanager.eidian.bookmanager.Adapters;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -9,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.bookmanager.eidian.bookmanager.Activities.BorrowingBookImformation;
 import com.bookmanager.eidian.bookmanager.Entities.Book;
 import com.bookmanager.eidian.bookmanager.Entities.MyLibraryBook;
 import com.bookmanager.eidian.bookmanager.R;
@@ -38,27 +40,22 @@ public class MyLibraryBookAdapter extends RecyclerView.Adapter<MyLibraryBookAdap
     }
 
     @Override
-    public void onBindViewHolder(BookViewHolder holder, int position) {
+    public void onBindViewHolder(BookViewHolder holder, final int position) {
 
-        if (myLibraryBooks.get(position).getReturned_date().equals(" ")) {
-            holder.content.setText("作者：" + myLibraryBooks.get(position).getAuthor() + "\n" +
-                    "书名：" + myLibraryBooks.get(position).getBookName() + "\n" +
-                    "出版年份：" + myLibraryBooks.get(position).getYear() + "\n" +
-                    "应还日期：" + myLibraryBooks.get(position).getShould_date() + "\n" +
-                    "分馆：" + myLibraryBooks.get(position).getLib());
-        } else {
             holder.content.setText("作者：" + myLibraryBooks.get(position).getAuthor() + "\n" +
                     "书名：" + myLibraryBooks.get(position).getBookName() + "\n" +
                     "出版年份：" + myLibraryBooks.get(position).getYear() + "\n" +
                     "应还日期：" + myLibraryBooks.get(position).getShould_date() + "\n" +
                     "归还日期：" + myLibraryBooks.get(position).getReturned_date() + "\n" +
                     "分馆：" + myLibraryBooks.get(position).getLib());
-        }
 
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(activity, BorrowingBookImformation.class);
+                intent.putExtra("url", myLibraryBooks.get(position).getUrl());
+                intent.putExtra("book_url", myLibraryBooks.get(position).getBook_url());
+                activity.startActivity(intent);
             }
         });
     }

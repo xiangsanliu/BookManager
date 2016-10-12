@@ -18,6 +18,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 
+import com.bookmanager.eidian.bookmanager.Helpers.BaseActivity;
 import com.bookmanager.eidian.bookmanager.R;
 
 import org.jsoup.Jsoup;
@@ -36,7 +37,7 @@ import java.net.URLEncoder;
 import at.markushi.ui.CircleButton;
 
 
-public class SouthLakeActivity extends AppCompatActivity implements View.OnClickListener {
+public class SouthLakeActivity extends BaseActivity implements View.OnClickListener {
     public static final int SHOW_RESPONSE = 0;
 
     private SharedPreferences pref;

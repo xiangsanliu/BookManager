@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
 
+import com.bookmanager.eidian.bookmanager.Helpers.BaseActivity;
 import com.bookmanager.eidian.bookmanager.Helpers.InternetConnection;
 import com.bookmanager.eidian.bookmanager.R;
 
@@ -16,7 +17,7 @@ import org.json.JSONObject;
 /**
  * Created by clmiberf on 2016/9/26.
  */
-public class Show_rank_book_message extends Activity {
+public class Show_rank_book_message extends BaseActivity {
 
     private TextView view;
 
