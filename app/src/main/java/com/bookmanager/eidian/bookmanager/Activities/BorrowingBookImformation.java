@@ -31,9 +31,6 @@ public class BorrowingBookImformation extends AppCompatActivity {
             String content = (String) msg.obj;
             textView.setText(content);
 
-            if (renew_url.length()==0) {
-            renew_button.setVisibility(View.GONE);
-            }
         }
     };
 
@@ -55,6 +52,7 @@ public class BorrowingBookImformation extends AppCompatActivity {
                     renew_url = document.select("td.td1").get(5).select("A").attr("HREF");
 
                 } else {
+                    renew_button.setVisibility(View.GONE);
                     renew_url = "";
                 }
                 InternetConnection internetConnection1 = new InternetConnection(book_url, book_url);
@@ -102,7 +100,14 @@ public class BorrowingBookImformation extends AppCompatActivity {
                             });
                     builder.create().show();
                 } else   {
-                    renew_button.setVisibility(View.GONE);
+                    android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(BorrowingBookImformation.this);
+                    builder.setMessage("该书籍已达到最大续借次数")
+                            .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                }
+                            })
+                            .setTitle("提示");
+                    builder.create().show();
                 }
             }
         });
