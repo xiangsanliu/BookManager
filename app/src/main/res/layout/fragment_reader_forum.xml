@@ -2,8 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#eeee"
-    tools:context="com.xiang.text4.Fragments.ReaderForumFragment">
+    android:background="#eeee">
 
     <TextView
         android:layout_width="match_parent"

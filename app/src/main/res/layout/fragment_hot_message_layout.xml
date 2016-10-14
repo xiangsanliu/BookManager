@@ -1,84 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <RelativeLayout>
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="5dp"
-            android:gravity="center"
-            android:text="新书推荐"
-            android:textSize="25dp"/>
-    </RelativeLayout>
-
-
-    <RelativeLayout>
-        <Button
-            android:id="@+id/previous"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="上一页"
-            android:textSize="20dp" />
-        <Button
-            android:id="@+id/new_book_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:text="新书推荐"
-            android:textSize="20dp"/>
-
-        <Button
-            android:id="@+id/next"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:text="下一页"
-            android:textSize="20dp"/>
-    </RelativeLayout>
-
-    <TextView
+    <com.cjj.MaterialRefreshLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="借阅排行"
-        android:layout_marginTop="10dp"
-        android:gravity="center_horizontal"
-        android:textSize="25dp"/>
-    <RelativeLayout>
-        <Button
-            android:id="@+id/hot_rank_year_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="最近一年"
-            android:textSize="15dp"/>
-
-        <Button
-            android:id="@+id/hot_rank_three_month"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/hot_rank_year"
-            android:text="最近三个月" />
-
-        <Button
-            android:id="@+id/hot_rank_one_month"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/hot_rank_three_month"
-            android:text="最近一个月"/>
-        <Button
-            android:id="@+id/hot_rank_one_week"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/hot_rank_one_month"
-            android:text="最近一周"/>
-
-    </RelativeLayout>
-
-    <ListView
-        android:id="@+id/show_hot_message"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:id="@+id/swipe_to_refresh"
+        android:layout_height="match_parent">
+            <ListView
+                android:id="@+id/show_hotmessage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+    </com.cjj.MaterialRefreshLayout>
 
 
 

@@ -33,7 +33,6 @@
         </activity>
         <activity
             android:name=".Activities.ActivityContentActivity"
-            android:label="南湖跑查询"
             android:parentActivityName=".Activities.MainActivity"
             android:theme="@style/AppTheme" />
         <activity

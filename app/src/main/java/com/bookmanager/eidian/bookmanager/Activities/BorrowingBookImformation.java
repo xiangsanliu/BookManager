@@ -60,7 +60,7 @@ public class BorrowingBookImformation extends AppCompatActivity {
                 Document document1 = Jsoup.parse(s);
                 Elements elements = document1.select("tr");
                 String content = "";
-                for (int i=2;i<elements.size();i++){
+                for (int i=2;i<elements.size()-2;i++){
                     content += elements.get(i).text() +"\n";
                 }
 

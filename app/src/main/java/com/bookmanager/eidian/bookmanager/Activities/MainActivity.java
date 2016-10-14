@@ -22,6 +22,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -37,6 +38,7 @@ import com.bookmanager.eidian.bookmanager.Fragments.HomePageFragments.NewsFragme
 import com.bookmanager.eidian.bookmanager.Fragments.HomePageFragments.NoticeFragment;
 import com.bookmanager.eidian.bookmanager.Fragments.HotMessageFragment;
 import com.bookmanager.eidian.bookmanager.Fragments.MyLibraryFragment;
+import com.bookmanager.eidian.bookmanager.Fragments.RankFragment;
 import com.bookmanager.eidian.bookmanager.Fragments.ReaderForumFragment;
 import com.bookmanager.eidian.bookmanager.Fragments.Settings;
 import com.bookmanager.eidian.bookmanager.Helpers.ActivityCollector;
@@ -149,6 +151,8 @@ public class MainActivity extends BaseActivity
         isLogined = intent.getBooleanExtra("isLogined", false);
 
 
+
+
         pref = PreferenceManager.getDefaultSharedPreferences(this);
         final String account = pref.getString("account_lib", " ");
         final String password = pref.getString("password_lib", " ");
@@ -207,7 +211,9 @@ public class MainActivity extends BaseActivity
                             Document document1 = Jsoup.parse(response.toString());
                             Element elements1 = document1.getElementById("header");
                             Elements elements2 = document1.select("td.td2");
-                            name = elements2.get(1).text();
+                            if (elements2.size()>1) {
+                                name = elements2.get(1).text();
+                            }
                             String isLogin = elements1.getElementsByTag("a").first().text();
                             if (isLogin.equals("退出")) {
                                 //list用来存放各类url
@@ -271,7 +277,6 @@ public class MainActivity extends BaseActivity
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        mTabLayout = (TabLayout) findViewById(R.id.tabLayout);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -311,9 +316,7 @@ public class MainActivity extends BaseActivity
                 }
             }
         });
-
-        initViewPager();
-        initTabLayout();
+        initViewPagerHomePage();
     }
 
     @Override
@@ -368,9 +371,11 @@ public class MainActivity extends BaseActivity
         int id = item.getItemId();
 
         if (id == R.id.imageView){
-        } else if (id == R.id.home_page) {
-            mTabLayout.setVisibility(View.VISIBLE);
-            mViewPager.setVisibility(View.VISIBLE);
+        }
+
+        else if (id == R.id.home_page) {
+            findViewById(R.id.tabLayout).setVisibility(View.VISIBLE);
+            findViewById(R.id.viewPager).setVisibility(View.VISIBLE);
             showSearchButton = false;
             actionBar.setTitle("主页");
             Fragment fragment = fragmentManager.findFragmentByTag("FinishTag");
@@ -380,8 +385,8 @@ public class MainActivity extends BaseActivity
         }
 
         else if (id == R.id.book_search) {
-            mTabLayout.setVisibility(View.GONE);
-            mViewPager.setVisibility(View.GONE);
+            findViewById(R.id.tabLayout).setVisibility(View.GONE);
+            findViewById(R.id.viewPager).setVisibility(View.GONE);
             actionBar.setTitle("馆藏查询");
             showSearchButton = true;
             Fragment findBookFragment = new FindBookFragment();
@@ -399,8 +404,8 @@ public class MainActivity extends BaseActivity
             startActivity(new Intent(MainActivity.this, SouthLakeActivity.class));
         }
         else if (id == R.id.my_library) {
-            mTabLayout.setVisibility(View.GONE);
-            mViewPager.setVisibility(View.GONE);
+            findViewById(R.id.tabLayout).setVisibility(View.GONE);
+            findViewById(R.id.viewPager).setVisibility(View.GONE);
             showSearchButton = false;
             Fragment myLibraryFragment = new MyLibraryFragment();
             actionBar.setTitle("我的图书馆");
@@ -416,58 +421,49 @@ public class MainActivity extends BaseActivity
                 finish();
             }
         } else if (id == R.id.recommend) {
-            mTabLayout.setVisibility(View.GONE);
-            mViewPager.setVisibility(View.GONE);
+            findViewById(R.id.tabLayout).setVisibility(View.GONE);
+            findViewById(R.id.viewPager).setVisibility(View.GONE);
             showSearchButton = false;
-            actionBar.setTitle("推荐书籍");
+            actionBar.setTitle("新书推荐");
             Fragment hotMessageFragment = new HotMessageFragment();
             Bundle bundle = new Bundle();
             bundle.putString("str",str);
             bundle.putString("myLibrary",hotMessage);
             hotMessageFragment.setArguments(bundle);
             transaction.replace(R.id.content, hotMessageFragment, "FinishTag").commit();
-        } else if (id == R.id.reader_forum) {
-            mTabLayout.setVisibility(View.GONE);
-            mViewPager.setVisibility(View.GONE);
+        }else  if (id == R.id.rank){
+            findViewById(R.id.tabLayout).setVisibility(View.GONE);
+            findViewById(R.id.viewPager).setVisibility(View.GONE);
             showSearchButton = false;
-            actionBar.setTitle("读者论坛");
-            Fragment readerForumFragment = new ReaderForumFragment();
-            transaction.replace(R.id.content, readerForumFragment, "FinishTag").commit();
-        } else if (id == R.id.action_settings) {
-            mTabLayout.setVisibility(View.GONE);
-            mViewPager.setVisibility(View.GONE);
-            showSearchButton = false;
-            actionBar.setTitle("设置");
-            Fragment settingsFragment = new Settings();
-            transaction.replace(R.id.content, settingsFragment, "FinishTag").commit();
+            actionBar.setTitle("借阅排行");
+            Fragment rankFragment = new RankFragment();
+            transaction.replace(R.id.content, rankFragment, "FinishTag").commit();
         } else if (id == R.id.info) {
             InfoDialogFragment infoDialogFragment = new InfoDialogFragment();
             infoDialogFragment.show(fragmentManager, "MainActivity");
         } else if (id == R.id.feed_back) {
             FeedBackDialogFragment feedBackDialogFragment = new FeedBackDialogFragment();
             feedBackDialogFragment.show(fragmentManager, "MainActivity");
+        } else if (id == R.id.help_each_other){
+            Toast.makeText(MainActivity.this, "功能正在开发中,敬请期待", Toast.LENGTH_SHORT).show();
         }
-
         invalidateOptionsMenu();
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
-    private void initTabLayout() {
-        mTabLayout.addTab(mTabLayout.newTab().setText("Tab1"));//给TabLayout添加Tab
-        mTabLayout.addTab(mTabLayout.newTab().setText("Tab2"));
-        mTabLayout.addTab(mTabLayout.newTab().setText("Tab3"));
-        mTabLayout.setupWithViewPager(mViewPager);
-    }
 
-    private void initViewPager() {
-        mViewPager = (ViewPager) findViewById(R.id.viewPager);
+
+    private void initViewPagerHomePage() {
+        ViewPager viewPager = (ViewPager) findViewById(R.id.viewPager);
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabLayout);
         MyViewPagerAdapter viewPagerAdapter = new MyViewPagerAdapter(getSupportFragmentManager());
         viewPagerAdapter.addFragment(NewsFragment.newInstance(), "馆内新闻");
         viewPagerAdapter.addFragment(NoticeFragment.newInstance(), "通知公告");
         viewPagerAdapter.addFragment(ActivityForecastFragment.newInstance(), "活动预告");
-        mViewPager.setAdapter(viewPagerAdapter);//设置适配器
+        viewPager.setAdapter(viewPagerAdapter);//设置适配器
+        tabLayout.setupWithViewPager(viewPager);
     }
 
 

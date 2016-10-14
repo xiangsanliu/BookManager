@@ -22,6 +22,7 @@ public class MyViewPagerAdapter extends FragmentPagerAdapter {
         mFragmentsTitles.add(fragmentTitle);
     }
 
+
     @Override
     public Fragment getItem(int position) {
         //得到对应position的Fragment
