@@ -33,35 +33,38 @@
             android:layout_height="wrap_content"
             android:text="西文文献" />
     </LinearLayout>
-    <RelativeLayout
+    <com.cjj.MaterialRefreshLayout
+        android:id="@+id/refresh"
+        app:isLoadMore="true"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <ListView
-            android:id="@+id/show_result"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true">
-            <at.markushi.ui.CircleButton
-                android:id="@+id/previous"
-                android:layout_width="64dip"
-                android:layout_height="64dip"
-                android:src="@drawable/ic_keyboard_arrow_left_white_24dp"
-                app:cb_color="#99CC00"
-                app:cb_pressedRingWidth="8dip"
-                android:layout_alignParentLeft="true"/>
-            <at.markushi.ui.CircleButton
-                android:id="@+id/next"
-                android:layout_width="64dip"
-                android:layout_height="64dip"
-                android:src="@drawable/ic_keyboard_arrow_right_white_24dp"
-                app:cb_color="#99CC00"
-                app:cb_pressedRingWidth="8dip"
-                android:layout_alignParentRight="true"/>
-        </RelativeLayout>
-    </RelativeLayout>
+            <ListView
+                android:id="@+id/show_result"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        <!--<RelativeLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_alignParentBottom="true">-->
+            <!--<at.markushi.ui.CircleButton-->
+                <!--android:id="@+id/previous"-->
+                <!--android:layout_width="64dip"-->
+                <!--android:layout_height="64dip"-->
+                <!--android:src="@drawable/ic_keyboard_arrow_left_white_24dp"-->
+                <!--app:cb_color="#99CC00"-->
+                <!--app:cb_pressedRingWidth="8dip"-->
+                <!--android:layout_alignParentLeft="true"/>-->
+            <!--<at.markushi.ui.CircleButton-->
+                <!--android:id="@+id/next"-->
+                <!--android:layout_width="64dip"-->
+                <!--android:layout_height="64dip"-->
+                <!--android:src="@drawable/ic_keyboard_arrow_right_white_24dp"-->
+                <!--app:cb_color="#99CC00"-->
+                <!--app:cb_pressedRingWidth="8dip"-->
+                <!--android:layout_alignParentRight="true"/>-->
+        <!--</RelativeLayout>-->
+    </com.cjj.MaterialRefreshLayout>
 
 
 </LinearLayout>

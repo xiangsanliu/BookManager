@@ -23,6 +23,8 @@ import com.bookmanager.eidian.bookmanager.Adapters.BookAdapter;
 import com.bookmanager.eidian.bookmanager.Entities.Book;
 import com.bookmanager.eidian.bookmanager.Helpers.InternetConnection;
 import com.bookmanager.eidian.bookmanager.R;
+import com.cjj.MaterialRefreshLayout;
+import com.cjj.MaterialRefreshListener;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -55,7 +57,13 @@ public class FindBookFragment extends Fragment {
 
     private String path;
 
+    BookAdapter adapter1;
+
+    BookAdapter adapter;
+
     private CircleButton previous;
+
+    MaterialRefreshLayout materialRefreshLayout ;
 
     private CircleButton next;
     //记录第几页
@@ -66,7 +74,7 @@ public class FindBookFragment extends Fragment {
             switch (message.what){
                 case SHOW_CHINESE_RESPONSE:
                     Object responseChinese =  message.obj;
-                    BookAdapter adapter = new BookAdapter(getActivity(), R.layout.item_book_view, (List<Book>) responseChinese);
+                    adapter = new BookAdapter(getActivity(), R.layout.item_book_view, (List<Book>) responseChinese);
                     listView.setAdapter(adapter);
                     listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
@@ -81,7 +89,7 @@ public class FindBookFragment extends Fragment {
                     break;
                 case SHOW_WESTERN_RESPONSE:
                     Object responseWestern = message.obj;
-                    BookAdapter adapter1 = new BookAdapter(getActivity(),R.layout.item_book_view, (List<Book>) responseWestern);
+                    adapter1 = new BookAdapter(getActivity(),R.layout.item_book_view, (List<Book>) responseWestern);
                     listView.setAdapter(adapter1);
                     listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
@@ -95,6 +103,15 @@ public class FindBookFragment extends Fragment {
                         }
                     });
                     break;
+                case 3:
+                    if (adapter!= null){
+                        adapter.notifyDataSetChanged();
+                    }
+                    if (adapter1!= null){
+                        adapter1.notifyDataSetChanged();
+                    }
+                    materialRefreshLayout.finishRefreshLoadMore();
+
                 default:
                     break;
             }
@@ -115,10 +132,10 @@ public class FindBookFragment extends Fragment {
         bookEdit = (EditText) view.findViewById(R.id.input_book);
         searchChinese = (Button) view.findViewById(R.id.search_book_chinese_button);
         searchWestern = (Button) view.findViewById(R.id.search_book_western_button);
-        previous = (CircleButton) view.findViewById(R.id.previous);
-        next = (CircleButton) view.findViewById(R.id.next);
+//        previous = (CircleButton) view.findViewById(R.id.previous);
+//        next = (CircleButton) view.findViewById(R.id.next);
         listView = (ListView) view.findViewById(R.id.show_result);
-
+        materialRefreshLayout = (MaterialRefreshLayout) view.findViewById(R.id.refresh);
         //接受传来的数据
         Bundle bundle = getArguments();
         final String builder = bundle.getString("search_extra");
@@ -177,6 +194,54 @@ public class FindBookFragment extends Fragment {
             }
         });
 
+        materialRefreshLayout.setMaterialRefreshListener(new MaterialRefreshListener() {
+            @Override
+            public void onRefresh(MaterialRefreshLayout materialRefreshLayout) {
+                materialRefreshLayout.finishRefresh();
+
+            }
+
+            @Override
+            public void onRefreshLoadMore(final MaterialRefreshLayout materialRefreshLayout) {
+                super.onRefreshLoadMore(materialRefreshLayout);
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        page+=10;
+                        String path3 = ptr+"short-jump&jump="+page+"&pag=now";
+                        InternetConnection inter = new InternetConnection(path3,builder);
+                        Document document = Jsoup.parse(inter.getResponse());
+
+                        Elements elements = document.getElementsByClass("items");
+                        //将搜索结果归类
+                        for (int i =0;i<elements.size();i++){
+                            Book book1 = new Book();
+                            Element element = elements.get(i);
+                            String titleUrl = element.select("div.itemtitle a").attr("href");
+                            String title = element.select("div.itemtitle a").text();
+                            String author = element.select("td.content").first().text();
+                            String callNumber = element.select("td.content").get(1).text();
+                            String publisher = element.select("td.content").get(2).text();
+                            String publishTime = element.select("td.content").get(3).text();
+                            book1.setBookName(title);
+                            book1.setAuthor("作者: "+author);
+                            book1.setCallNumber("索书号: "+callNumber);
+                            book1.setPublisher("出版社: "+publisher);
+                            book1.setPublishTime("出版年份: "+publishTime);
+                            book1.setTitleUrl(titleUrl);
+                            bookList.add(book1);
+                        }
+
+
+                        Message message = new Message();
+                        message.what = 3;
+                        message.obj = bookList;
+                        handler.sendMessage(message);
+                    }
+                }).start();
+            }
+        });
+
         searchWestern.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -227,94 +292,59 @@ public class FindBookFragment extends Fragment {
             }
         });
 
-        next.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        page+=10;
-                        String path3 = ptr+"short-jump&jump="+page+"&pag=now";
-                        InternetConnection inter = new InternetConnection(path3,builder);
-                        Document document = Jsoup.parse(inter.getResponse());
-
-                        Elements elements = document.getElementsByClass("items");
-                        //将搜索结果归类
-                        bookList = new ArrayList<Book>();
-                        for (int i =0;i<elements.size();i++){
-                            Book book1 = new Book();
-                            Element element = elements.get(i);
-                            String titleUrl = element.select("div.itemtitle a").attr("href");
-                            String title = element.select("div.itemtitle a").text();
-                            String author = element.select("td.content").first().text();
-                            String callNumber = element.select("td.content").get(1).text();
-                            String publisher = element.select("td.content").get(2).text();
-                            String publishTime = element.select("td.content").get(3).text();
-                            book1.setBookName(title);
-                            book1.setAuthor("作者: "+author);
-                            book1.setCallNumber("索书号: "+callNumber);
-                            book1.setPublisher("出版社: "+publisher);
-                            book1.setPublishTime("出版年份: "+publishTime);
-                            book1.setTitleUrl(titleUrl);
-                            bookList.add(book1);
-                        }
-
-
-                        Message message = new Message();
-                        message.what = SHOW_CHINESE_RESPONSE;
-                        message.obj = bookList;
-                        handler.sendMessage(message);
-                    }
-                }).start();
-            }
-        });
-
-        previous.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (page > 1) {
-                            page-=10;
-                            String pathPrevious = ptr + "short-jump&jump=" + page + "&pag=now";
-                            InternetConnection inter = new InternetConnection(pathPrevious, builder);
-                            Document document = Jsoup.parse(inter.getResponse());
-
-                            Elements elements = document.getElementsByClass("items");
-                            //将搜索结果归类
-                            bookList = new ArrayList<Book>();
-                            for (int i = 0; i < elements.size(); i++) {
-                                Book book1 = new Book();
-                                Element element = elements.get(i);
-                                String titleUrl = element.select("div.itemtitle a").attr("href");
-                                String title = element.select("div.itemtitle a").text();
-                                String author = element.select("td.content").first().text();
-                                String callNumber = element.select("td.content").get(1).text();
-                                String publisher = element.select("td.content").get(2).text();
-                                String publishTime = element.select("td.content").get(3).text();
-                                book1.setBookName(title);
-                                book1.setAuthor("作者: " + author);
-                                book1.setCallNumber("索书号: " + callNumber);
-                                book1.setPublisher("出版社: " + publisher);
-                                book1.setPublishTime("出版年份: " + publishTime);
-                                book1.setTitleUrl(titleUrl);
-                                bookList.add(book1);
-                            }
-
-                            Message message = new Message();
-                            message.what = SHOW_CHINESE_RESPONSE;
-                            message.obj = bookList;
-                            handler.sendMessage(message);
-
-                        }
-                    }
-                }).start();
-
-
-            }
-        });
+//        next.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//
+//            }
+//        });
+//
+//        previous.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//
+//                new Thread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        if (page > 1) {
+//                            page-=10;
+//                            String pathPrevious = ptr + "short-jump&jump=" + page + "&pag=now";
+//                            InternetConnection inter = new InternetConnection(pathPrevious, builder);
+//                            Document document = Jsoup.parse(inter.getResponse());
+//
+//                            Elements elements = document.getElementsByClass("items");
+//                            //将搜索结果归类
+//                            bookList = new ArrayList<Book>();
+//                            for (int i = 0; i < elements.size(); i++) {
+//                                Book book1 = new Book();
+//                                Element element = elements.get(i);
+//                                String titleUrl = element.select("div.itemtitle a").attr("href");
+//                                String title = element.select("div.itemtitle a").text();
+//                                String author = element.select("td.content").first().text();
+//                                String callNumber = element.select("td.content").get(1).text();
+//                                String publisher = element.select("td.content").get(2).text();
+//                                String publishTime = element.select("td.content").get(3).text();
+//                                book1.setBookName(title);
+//                                book1.setAuthor("作者: " + author);
+//                                book1.setCallNumber("索书号: " + callNumber);
+//                                book1.setPublisher("出版社: " + publisher);
+//                                book1.setPublishTime("出版年份: " + publishTime);
+//                                book1.setTitleUrl(titleUrl);
+//                                bookList.add(book1);
+//                            }
+//
+//                            Message message = new Message();
+//                            message.what = SHOW_CHINESE_RESPONSE;
+//                            message.obj = bookList;
+//                            handler.sendMessage(message);
+//
+//                        }
+//                    }
+//                }).start();
+//
+//
+//            }
+//        });
         return view;
     }
 
