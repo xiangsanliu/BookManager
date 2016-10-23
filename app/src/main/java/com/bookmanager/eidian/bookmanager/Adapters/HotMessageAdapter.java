@@ -7,8 +7,6 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import com.bookmanager.eidian.bookmanager.Entities.Book;
-import com.bookmanager.eidian.bookmanager.Fragments.HotMessageFragment;
 import com.bookmanager.eidian.bookmanager.Helpers.HotMsg;
 import com.bookmanager.eidian.bookmanager.R;
 
@@ -28,15 +26,8 @@ public class HotMessageAdapter extends ArrayAdapter<HotMsg>{
         super(context,textViewResourceId, objects);
         resourceId = textViewResourceId;
     }
-//    public HotMessageAdapter(Context context, int resource, List<HotMsg> objects) {
-//        super(context, resource, objects);
-//    }
 
 
-//    public HotMessageAdapter(HotMessageFragment context, int resource, List<HotMsg> objects) {
-//        super(context, resource, objects);
-//        resourceId = resource;
-//    }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {

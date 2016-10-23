@@ -65,7 +65,7 @@
             android:parentActivityName=".Activities.MyLibraryContent"/>
         <activity
             android:name=".Activities.SearchBookActivity"
-            android:label="查询结果"
+            android:label="馆藏查询"
             android:parentActivityName=".Activities.MainActivity" />
         <activity
             android:name=".Activities.MyLibraryActivity"
