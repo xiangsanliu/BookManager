@@ -3,6 +3,7 @@ package com.bookmanager.eidian.bookmanager.Activities;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -23,6 +24,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,8 +34,6 @@ import com.bookmanager.eidian.bookmanager.DialogFragments.InfoDialogFragment;
 import com.bookmanager.eidian.bookmanager.Fragments.HomePageFragments.ActivityForecastFragment;
 import com.bookmanager.eidian.bookmanager.Fragments.HomePageFragments.NewsFragment;
 import com.bookmanager.eidian.bookmanager.Fragments.HomePageFragments.NoticeFragment;
-import com.bookmanager.eidian.bookmanager.Fragments.HotMessageFragment;
-import com.bookmanager.eidian.bookmanager.Fragments.RankFragment;
 import com.bookmanager.eidian.bookmanager.Fragments.SearchBookFragment;
 import com.bookmanager.eidian.bookmanager.Helpers.ActivityCollector;
 import com.bookmanager.eidian.bookmanager.Helpers.BaseActivity;
@@ -62,10 +62,6 @@ public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private boolean isLogined = false;
-    private boolean showSearchButton = false;
-    private SharedPreferences.Editor editor;
-    private ViewPager mViewPager;
-    private TabLayout mTabLayout;
     private String search;
     private List<String> list;
     private String myLibrary1;
@@ -128,9 +124,6 @@ public class MainActivity extends BaseActivity
 
         Intent intent = getIntent();
         isLogined = intent.getBooleanExtra("isLogined", false);
-
-
-
 
         pref = PreferenceManager.getDefaultSharedPreferences(this);
         final String account = pref.getString("account_lib", " ");
@@ -247,8 +240,6 @@ public class MainActivity extends BaseActivity
             search = intent.getStringExtra("search");
             myLibrary1 = intent.getStringExtra("myLibrary");
             hotMessage = intent.getStringExtra("hotMessage");
-//        String reader = intent.getStringExtra("reader");
-//        String history = intent.getStringExtra("history");
             //获取相同的参数
             i = search.length();
             str = search.substring(0,i-8);
@@ -309,47 +300,6 @@ public class MainActivity extends BaseActivity
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main, menu);
-        SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(final String query) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                builder.setMessage("请选择搜索方式")
-                        .setPositiveButton("中文搜索", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                Intent intent = new Intent(MainActivity.this, SearchBookActivity.class);
-                                intent.putExtra("search_extra", search);
-                                intent.putExtra("search_content",query);
-                                intent.putExtra("isChinese", true);
-                                startActivity(intent);
-                            }
-                        })
-                        .setNegativeButton("英文搜索", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                Intent intent = new Intent(MainActivity.this, SearchBookActivity.class);
-                                intent.putExtra("search_extra", search);
-                                intent.putExtra("search_content",query);
-                                intent.putExtra("isChinese", false);
-                                startActivity(intent);
-                        }
-                        });
-                builder.create().show();
-                return true;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                return false;
-            }
-        });
-        return true;
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_exit) {
@@ -358,17 +308,6 @@ public class MainActivity extends BaseActivity
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    //用来设置搜索图标的隐藏和显示：只有在馆藏查询的时候才显示搜索按钮
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        if (showSearchButton==true){
-            menu.findItem(R.id.search).setVisible(true);
-        } else{
-            menu.findItem(R.id.search).setVisible(false);
-        }
-        return super.onPrepareOptionsMenu(menu);
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -383,14 +322,28 @@ public class MainActivity extends BaseActivity
             case R.id.imageView:
                 break;
             case R.id.book_search:
-                actionBar.setTitle("馆藏查询");
-                showSearchButton = true;
-                Fragment searchBookFragment = new SearchBookFragment();
                 if (isLogined) {
-                    Bundle bundle = new Bundle();
-                    bundle.putString("search_extra", search);
-                    searchBookFragment.setArguments(bundle);
-                    transaction.replace(R.id.content, searchBookFragment, "FinishTag").commit();
+                    AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                    builder.setMessage("请选择需要搜索的方式")
+                            .setPositiveButton("中文搜索", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Intent intent = new Intent(MainActivity.this, SearchBookActivity.class);
+                                    intent.putExtra("search_extra", search);
+                                    intent.putExtra("isChinese", true);
+                                    startActivity(intent);
+                                }
+                            })
+                            .setNegativeButton("英文搜索", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Intent intent = new Intent(MainActivity.this, SearchBookActivity.class);
+                                    intent.putExtra("search_extra", search);
+                                    intent.putExtra("isChinese", false);
+                                    startActivity(intent);
+                                }
+                            });
+                    builder.create().show();
                 } else {
                     startActivity(new Intent(MainActivity.this, LoginActivity.class));
                     Toast.makeText(this, "请先登陆", Toast.LENGTH_SHORT).show();
@@ -401,7 +354,6 @@ public class MainActivity extends BaseActivity
                 startActivity(new Intent(MainActivity.this, SouthLakeActivity.class));
                 break;
             case R.id.my_library:
-                actionBar.setTitle("我的图书馆");
                 if (isLogined) {
                     Intent intent = new Intent(MainActivity.this, MyLibraryActivity.class);
                     intent.putExtra("str", str);
@@ -414,13 +366,11 @@ public class MainActivity extends BaseActivity
                 }
                 break;
             case R.id.recommend:
-                actionBar.setTitle("新书推荐");
                 Intent intent = new Intent(MainActivity.this, RecommendActivity.class);
                 intent.putExtra("str", str);
                 startActivity(intent);
                 break;
             case R.id.rank:
-                actionBar.setTitle("借阅排行");
                 startActivity(new Intent(MainActivity.this, RankActivity.class));
                 break;
             case R.id.info:
@@ -432,7 +382,8 @@ public class MainActivity extends BaseActivity
                 feedBackDialogFragment.show(fragmentManager, "MainActivity");
                 break;
             case R.id.help_each_other:
-                Toast.makeText(MainActivity.this, "功能正在开发中,敬请期待", Toast.LENGTH_SHORT).show();
+
+                startActivity(new Intent(MainActivity.this,BmobReaderQueryBookActivity.class));
                 break;
         }
         invalidateOptionsMenu();

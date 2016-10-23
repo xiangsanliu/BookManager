@@ -21,6 +21,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </com.cjj.MaterialRefreshLayout>
+    <TextView
+        android:id="@+id/notice"
+        android:text="点击右上角的搜索按钮进行搜索"
+        android:textSize="20dp"
+        android:layout_centerInParent="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
 
 </RelativeLayout>

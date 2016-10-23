@@ -3,6 +3,11 @@
     package="com.bookmanager.eidian.bookmanager">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
     <supports-screens
         android:anyDensity="true"
@@ -60,12 +65,13 @@
         <activity
             android:name=".Activities.Show_rank_book_message"
             android:parentActivityName=".Activities.MainActivity" />
-        <activity android:name=".Activities.BorrowingBookImformation"
+        <activity
+            android:name=".Activities.BorrowingBookImformation"
             android:label="书籍详情"
-            android:parentActivityName=".Activities.MyLibraryContent"/>
+            android:parentActivityName=".Activities.MyLibraryContent" />
         <activity
             android:name=".Activities.SearchBookActivity"
-            android:label="查询结果"
+            android:label="馆藏查询"
             android:parentActivityName=".Activities.MainActivity" />
         <activity
             android:name=".Activities.MyLibraryActivity"
@@ -75,11 +81,14 @@
         <activity
             android:name=".Activities.RankActivity"
             android:label="借阅排行"
-            android:parentActivityName=".Activities.MainActivity"/>
+            android:parentActivityName=".Activities.MainActivity" />
         <activity
             android:name=".Activities.RecommendActivity"
             android:label="新书推荐"
-            android:parentActivityName=".Activities.MainActivity"></activity>
+            android:parentActivityName=".Activities.MainActivity" />
+        <activity android:name=".Activities.BmobReaderAddBook" />
+        <activity android:name=".Activities.BmobReaderQueryBook" />
+        <activity android:name=".Activities.BmobReaderQueryBookActivity"></activity>
     </application>
 
 </manifest>

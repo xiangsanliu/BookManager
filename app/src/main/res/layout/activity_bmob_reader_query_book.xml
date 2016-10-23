@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/bmob_title_text"
+        android:text="书籍互借"
+        android:textSize="25dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/bmob_query_book_button"
+        android:text="查询"
+        android:textSize="15dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/bmob_title_text"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="14dp"
+        android:layout_marginTop="20dp" />
+
+    <EditText
+        android:id="@+id/bmob_query_book_edit"
+        android:hint="输入要查询的书籍"
+        android:layout_width="250dp"
+        android:layout_marginLeft="10dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="13dp"
+        android:maxLines="1"
+        android:layout_alignBottom="@+id/bmob_query_book_button"
+        android:layout_alignParentStart="true" />
+
+    <Listew
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/bmob_query_book_listview"
+        android:layout_below="@+id/bmob_query_book_button"
+        android:layout_marginTop="15dp" />
+
+    <Button
+        android:text="添加"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignEnd="@+id/bmob_query_book_button"
+        android:id="@+id/bmob_query_add_button" />
+
+
+</RelativeLayout>

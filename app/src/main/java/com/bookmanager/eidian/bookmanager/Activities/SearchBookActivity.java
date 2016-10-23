@@ -1,12 +1,19 @@
 package com.bookmanager.eidian.bookmanager.Activities;
 
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.SearchView;
+import android.view.Menu;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ListView;
 
 import com.bookmanager.eidian.bookmanager.Adapters.BookAdapter;
@@ -41,6 +48,13 @@ public class SearchBookActivity extends BaseActivity {
 
     BookAdapter adapter;
 
+    String str;
+
+    String ptr;
+
+    String stringBuilder;
+
+    Boolean isChinese;
 
     MaterialRefreshLayout materialRefreshLayout ;
 
@@ -107,19 +121,12 @@ public class SearchBookActivity extends BaseActivity {
         materialRefreshLayout = (MaterialRefreshLayout) findViewById(R.id.refresh);
         //接受传来的数据
         Intent intent = getIntent();
-        final String builder = intent.getStringExtra("search_extra");
-        Boolean isChinese = intent.getBooleanExtra("isChinese", true);
-        String book = intent.getStringExtra("search_content");
+        stringBuilder = intent.getStringExtra("search_extra");
+        isChinese = intent.getBooleanExtra("isChinese", true);
 
-        final int[] i = {builder.length()};
-        final String str = builder.substring(0, i[0] -2);
-        final String ptr = str.substring(0,i[0]-8);
-
-        if (isChinese) {
-            searchChinese(str, builder, book);
-        } else {
-            searchEnglish(str, builder, book);
-        }
+        final int[] i = {stringBuilder.length()};
+        str = stringBuilder.substring(0, i[0] -2);
+        ptr = str.substring(0,i[0]-8);
 
         materialRefreshLayout.setMaterialRefreshListener(new MaterialRefreshListener() {
             @Override
@@ -136,7 +143,7 @@ public class SearchBookActivity extends BaseActivity {
                     public void run() {
                         page+=10;
                         String path3 = ptr+"short-jump&jump="+page+"&pag=now";
-                        InternetConnection inter = new InternetConnection(path3,builder);
+                        InternetConnection inter = new InternetConnection(path3,stringBuilder);
                         Document document = Jsoup.parse(inter.getResponse());
 
                         Elements elements = document.getElementsByClass("items");
@@ -170,6 +177,33 @@ public class SearchBookActivity extends BaseActivity {
         });
 
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.search, menu);
+        final SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
+        searchView.setQueryHint("输入查询内容后按下回车键");
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(final String query) {
+                InputMethodManager inputMethodInfo = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                inputMethodInfo.hideSoftInputFromWindow(searchView.getWindowToken(), 0);
+                findViewById(R.id.notice).setVisibility(View.GONE);
+                if (isChinese) {
+                    searchChinese(str, stringBuilder, query);
+                } else {
+                    searchEnglish(str, stringBuilder, query);
+                }
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+        return true;
     }
 
     public void searchChinese(String str, final String builder, String book) {
