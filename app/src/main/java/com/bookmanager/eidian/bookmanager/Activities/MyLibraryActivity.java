@@ -1,38 +1,28 @@
-package com.bookmanager.eidian.bookmanager.Fragments;
-
+package com.bookmanager.eidian.bookmanager.Activities;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Bundle;
-import android.app.Fragment;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-
-import com.bookmanager.eidian.bookmanager.Activities.BorrowingContent;
-import com.bookmanager.eidian.bookmanager.Activities.MyLibraryContent;
+import com.bookmanager.eidian.bookmanager.Helpers.BaseActivity;
 import com.bookmanager.eidian.bookmanager.Helpers.InternetConnection;
 import com.bookmanager.eidian.bookmanager.R;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * A simple {@link Fragment} subclass.
- */
-public class MyLibraryFragment extends Fragment {
+public class MyLibraryActivity extends BaseActivity {
 
     private TextView money;
     private Button borrowing_num;
@@ -66,7 +56,7 @@ public class MyLibraryFragment extends Fragment {
                         borrowing_num.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                Intent intent = new Intent(getActivity(), BorrowingContent.class);
+                                Intent intent = new Intent(MyLibraryActivity.this, BorrowingContent.class);
                                 intent.putExtra("url", content[5]);
                                 startActivity(intent);
                             }
@@ -74,7 +64,7 @@ public class MyLibraryFragment extends Fragment {
                         history_num.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                Intent intent = new Intent(getActivity(), MyLibraryContent.class);
+                                Intent intent = new Intent(MyLibraryActivity.this, MyLibraryContent.class);
                                 intent.putExtra("url", content[6]);
                                 startActivity(intent);
                             }
@@ -82,7 +72,7 @@ public class MyLibraryFragment extends Fragment {
                         booked_num.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                Intent intent = new Intent(getActivity(), MyLibraryContent.class);
+                                Intent intent = new Intent(MyLibraryActivity.this, MyLibraryContent.class);
                                 intent.putExtra("url", content[7]);
                                 startActivity(intent);
                             }
@@ -90,7 +80,7 @@ public class MyLibraryFragment extends Fragment {
                         pre_num.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                Intent intent = new Intent(getActivity(), MyLibraryContent.class);
+                                Intent intent = new Intent(MyLibraryActivity.this, MyLibraryContent.class);
                                 intent.putExtra("url", content[8]);
                                 startActivity(intent);
                             }
@@ -108,38 +98,29 @@ public class MyLibraryFragment extends Fragment {
         }
     };
 
-
-    public MyLibraryFragment() {
-        // Required empty public constructor
-    }
-
-
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view =  inflater.inflate(R.layout.fragment_my_library, container, false);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_my_library);
+        money = (TextView) findViewById(R.id.money);
+        borrowing_num = (Button) findViewById(R.id.borrowing_num);
+        history_num = (Button) findViewById(R.id.history_num);
+        booked_num = (Button) findViewById(R.id.booked_num);
+        pre_num = (Button) findViewById(R.id.pre_num);
 
-        money = (TextView) view.findViewById(R.id.money);
-        borrowing_num = (Button) view.findViewById(R.id.borrowing_num);
-        history_num = (Button) view.findViewById(R.id.history_num);
-        booked_num = (Button) view.findViewById(R.id.booked_num);
-        pre_num = (Button) view.findViewById(R.id.pre_num);
-
-        Bundle bundle = getArguments();
-        final String myLibrary1 = bundle.getString("myLibrary");
-        final String str = bundle.getString("str");
+        Intent intent = getIntent();
+        final String myLibrary1 = intent.getStringExtra("myLibrary");
+        final String str = intent.getStringExtra("str");
         new Thread(new Runnable() {
             @Override
             public void run() {
                 //使用AlertDialog当获取信息出错时弹出信息
-                dialog = new AlertDialog.Builder(getActivity());
+                dialog = new AlertDialog.Builder(MyLibraryActivity.this);
                 dialog.setTitle("哎呀!出错啦~");
                 //存放myLibrary中的信息
                 contentList = new ArrayList<String>();
                 InternetConnection in = new InternetConnection(myLibrary1, myLibrary1);
                 String response = in.getResponse();
-                Log.d("Library1", myLibrary1);
                 if (response != null) {
                     Document document = Jsoup.parse(response);
                     String url;
@@ -168,7 +149,5 @@ public class MyLibraryFragment extends Fragment {
         }).start();
 
 
-        return view;
     }
-
 }

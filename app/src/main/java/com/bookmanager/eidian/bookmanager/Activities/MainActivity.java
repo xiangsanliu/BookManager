@@ -3,8 +3,6 @@ package com.bookmanager.eidian.bookmanager.Activities;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.app.SearchManager;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -22,7 +20,6 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -32,15 +29,12 @@ import android.widget.Toast;
 import com.bookmanager.eidian.bookmanager.Adapters.MyViewPagerAdapter;
 import com.bookmanager.eidian.bookmanager.DialogFragments.FeedBackDialogFragment;
 import com.bookmanager.eidian.bookmanager.DialogFragments.InfoDialogFragment;
-import com.bookmanager.eidian.bookmanager.Fragments.FindBookFragment;
 import com.bookmanager.eidian.bookmanager.Fragments.HomePageFragments.ActivityForecastFragment;
 import com.bookmanager.eidian.bookmanager.Fragments.HomePageFragments.NewsFragment;
 import com.bookmanager.eidian.bookmanager.Fragments.HomePageFragments.NoticeFragment;
 import com.bookmanager.eidian.bookmanager.Fragments.HotMessageFragment;
-import com.bookmanager.eidian.bookmanager.Fragments.MyLibraryFragment;
 import com.bookmanager.eidian.bookmanager.Fragments.RankFragment;
-import com.bookmanager.eidian.bookmanager.Fragments.ReaderForumFragment;
-import com.bookmanager.eidian.bookmanager.Fragments.Settings;
+import com.bookmanager.eidian.bookmanager.Fragments.SearchBookFragment;
 import com.bookmanager.eidian.bookmanager.Helpers.ActivityCollector;
 import com.bookmanager.eidian.bookmanager.Helpers.BaseActivity;
 import com.bookmanager.eidian.bookmanager.Helpers.InternetConnection;
@@ -81,7 +75,6 @@ public class MainActivity extends BaseActivity
     private LibraryList myLibrary = new LibraryList();
     private StringBuilder builder = new StringBuilder();
     static final int SHOW_RESPONSE = 0;
-    int isSeccuss = 0;
     Boolean isAutoLogin = false;
     String name;
     private TextView textView;
@@ -95,21 +88,7 @@ public class MainActivity extends BaseActivity
             switch (msg.what){
                 case SHOW_RESPONSE:
                     String response = (String) msg.obj;
-//                    Intent intent = new Intent(Login.this,ShowActivity.class);
-//                    intent.putExtra("data_extra",response);
-//                    startActivity(intent);
                     if (!response.equals("-1")) {
-//                        Log.d("1222222222334345", response);
-//                        Intent intent = new Intent(MainActivity.this, MainActivity.class);
-//                        intent.putExtra("search", list.get(4));
-//                        intent.putExtra("myLibrary", list.get(0));
-//                        intent.putExtra("hotMeesage", list.get(1));
-//                        intent.putExtra("reader", list.get(2));
-//                        intent.putExtra("history", list.get(3));
-//                        intent.putExtra("isLogined", true);
-//                        startActivity(intent);
-//                        finish();
-
                         search = list.get(4);
                         myLibrary1 = list.get(0);
 
@@ -332,10 +311,41 @@ public class MainActivity extends BaseActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
-        //当点击搜索按钮，输入内容后，点击键盘上的回车键时，跳转到查询Activity
-        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(final String query) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                builder.setMessage("请选择搜索方式")
+                        .setPositiveButton("中文搜索", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Intent intent = new Intent(MainActivity.this, SearchBookActivity.class);
+                                intent.putExtra("search_extra", search);
+                                intent.putExtra("search_content",query);
+                                intent.putExtra("isChinese", true);
+                                startActivity(intent);
+                            }
+                        })
+                        .setNegativeButton("英文搜索", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Intent intent = new Intent(MainActivity.this, SearchBookActivity.class);
+                                intent.putExtra("search_extra", search);
+                                intent.putExtra("search_content",query);
+                                intent.putExtra("isChinese", false);
+                                startActivity(intent);
+                        }
+                        });
+                builder.create().show();
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
         return true;
     }
 
@@ -365,87 +375,65 @@ public class MainActivity extends BaseActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         ActionBar actionBar = getSupportActionBar();        //得到actionBar的对象，以更改 Toolbar上的Title
+
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
-        // 当导航栏上的各种按钮被点击后，处理对应的事务
         int id = item.getItemId();
-
-        if (id == R.id.imageView){
-        }
-
-        else if (id == R.id.home_page) {
-            findViewById(R.id.tabLayout).setVisibility(View.VISIBLE);
-            findViewById(R.id.viewPager).setVisibility(View.VISIBLE);
-            showSearchButton = false;
-            actionBar.setTitle("主页");
-            Fragment fragment = fragmentManager.findFragmentByTag("FinishTag");
-            if (fragment != null) {
-                transaction.remove(fragment).commit();
-            }
-        }
-
-        else if (id == R.id.book_search) {
-            findViewById(R.id.tabLayout).setVisibility(View.GONE);
-            findViewById(R.id.viewPager).setVisibility(View.GONE);
-            actionBar.setTitle("馆藏查询");
-            showSearchButton = true;
-            Fragment findBookFragment = new FindBookFragment();
-            if (isLogined) {
-                Bundle bundle = new Bundle();
-                bundle.putString("search_extra",search);
-                findBookFragment.setArguments(bundle);
-                transaction.replace(R.id.content, findBookFragment, "FinishTag").commit();
-            } else {
-                startActivity(new Intent(MainActivity.this, LoginActivity.class));
-                Toast.makeText(this, "请先登陆", Toast.LENGTH_SHORT).show();
-                finish();
-            }
-        } else if (id == R.id.south_lake) {
-            startActivity(new Intent(MainActivity.this, SouthLakeActivity.class));
-        }
-        else if (id == R.id.my_library) {
-            findViewById(R.id.tabLayout).setVisibility(View.GONE);
-            findViewById(R.id.viewPager).setVisibility(View.GONE);
-            showSearchButton = false;
-            Fragment myLibraryFragment = new MyLibraryFragment();
-            actionBar.setTitle("我的图书馆");
-            if (isLogined) {
-                Bundle bundle = new Bundle();
-                bundle.putString("str",str);
-                bundle.putString("myLibrary",myLibrary1);
-                myLibraryFragment.setArguments(bundle);
-                transaction.replace(R.id.content, myLibraryFragment, "FinishTag").commit();
-            } else {
-                startActivity(new Intent(MainActivity.this, LoginActivity.class));
-                Toast.makeText(this, "请先登陆", Toast.LENGTH_SHORT).show();
-                finish();
-            }
-        } else if (id == R.id.recommend) {
-            findViewById(R.id.tabLayout).setVisibility(View.GONE);
-            findViewById(R.id.viewPager).setVisibility(View.GONE);
-            showSearchButton = false;
-            actionBar.setTitle("新书推荐");
-            Fragment hotMessageFragment = new HotMessageFragment();
-            Bundle bundle = new Bundle();
-            bundle.putString("str",str);
-            bundle.putString("myLibrary",hotMessage);
-            hotMessageFragment.setArguments(bundle);
-            transaction.replace(R.id.content, hotMessageFragment, "FinishTag").commit();
-        }else  if (id == R.id.rank){
-            findViewById(R.id.tabLayout).setVisibility(View.GONE);
-            findViewById(R.id.viewPager).setVisibility(View.GONE);
-            showSearchButton = false;
-            actionBar.setTitle("借阅排行");
-            Fragment rankFragment = new RankFragment();
-            transaction.replace(R.id.content, rankFragment, "FinishTag").commit();
-        } else if (id == R.id.info) {
-            InfoDialogFragment infoDialogFragment = new InfoDialogFragment();
-            infoDialogFragment.show(fragmentManager, "MainActivity");
-        } else if (id == R.id.feed_back) {
-            FeedBackDialogFragment feedBackDialogFragment = new FeedBackDialogFragment();
-            feedBackDialogFragment.show(fragmentManager, "MainActivity");
-        } else if (id == R.id.help_each_other){
-            Toast.makeText(MainActivity.this, "功能正在开发中,敬请期待", Toast.LENGTH_SHORT).show();
+        switch (id) {
+            case R.id.imageView:
+                break;
+            case R.id.book_search:
+                actionBar.setTitle("馆藏查询");
+                showSearchButton = true;
+                Fragment searchBookFragment = new SearchBookFragment();
+                if (isLogined) {
+                    Bundle bundle = new Bundle();
+                    bundle.putString("search_extra", search);
+                    searchBookFragment.setArguments(bundle);
+                    transaction.replace(R.id.content, searchBookFragment, "FinishTag").commit();
+                } else {
+                    startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                    Toast.makeText(this, "请先登陆", Toast.LENGTH_SHORT).show();
+                    finish();
+                }
+                break;
+            case R.id.south_lake:
+                startActivity(new Intent(MainActivity.this, SouthLakeActivity.class));
+                break;
+            case R.id.my_library:
+                actionBar.setTitle("我的图书馆");
+                if (isLogined) {
+                    Intent intent = new Intent(MainActivity.this, MyLibraryActivity.class);
+                    intent.putExtra("str", str);
+                    intent.putExtra("myLibrary", myLibrary1);
+                    startActivity(intent);
+                } else {
+                    startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                    Toast.makeText(this, "请先登陆", Toast.LENGTH_SHORT).show();
+                    finish();
+                }
+                break;
+            case R.id.recommend:
+                actionBar.setTitle("新书推荐");
+                Intent intent = new Intent(MainActivity.this, RecommendActivity.class);
+                intent.putExtra("str", str);
+                startActivity(intent);
+                break;
+            case R.id.rank:
+                actionBar.setTitle("借阅排行");
+                startActivity(new Intent(MainActivity.this, RankActivity.class));
+                break;
+            case R.id.info:
+                InfoDialogFragment infoDialogFragment = new InfoDialogFragment();
+                infoDialogFragment.show(fragmentManager, "MainActivity");
+                break;
+            case R.id.feed_back:
+                FeedBackDialogFragment feedBackDialogFragment = new FeedBackDialogFragment();
+                feedBackDialogFragment.show(fragmentManager, "MainActivity");
+                break;
+            case R.id.help_each_other:
+                Toast.makeText(MainActivity.this, "功能正在开发中,敬请期待", Toast.LENGTH_SHORT).show();
+                break;
         }
         invalidateOptionsMenu();
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

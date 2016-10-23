@@ -47,9 +47,12 @@
             android:parentActivityName=".Activities.SouthLakeActivity" />
         <activity
             android:name=".Activities.MyLibraryContent"
-            android:parentActivityName=".Activities.MainActivity" />
+            android:label="书籍列表"
+            android:launchMode="singleTop"
+            android:parentActivityName=".Activities.MyLibraryActivity" />
         <activity
             android:name=".Activities.BorrowingContent"
+            android:label="书籍列表"
             android:parentActivityName=".Activities.MainActivity" />
         <activity
             android:name=".Activities.Show_new_book_message"
@@ -57,7 +60,26 @@
         <activity
             android:name=".Activities.Show_rank_book_message"
             android:parentActivityName=".Activities.MainActivity" />
-        <activity android:name=".Activities.BorrowingBookImformation"></activity>
+        <activity android:name=".Activities.BorrowingBookImformation"
+            android:label="书籍详情"
+            android:parentActivityName=".Activities.MyLibraryContent"/>
+        <activity
+            android:name=".Activities.SearchBookActivity"
+            android:label="查询结果"
+            android:parentActivityName=".Activities.MainActivity" />
+        <activity
+            android:name=".Activities.MyLibraryActivity"
+            android:label="我的图书馆"
+            android:launchMode="singleTop"
+            android:parentActivityName=".Activities.MainActivity" />
+        <activity
+            android:name=".Activities.RankActivity"
+            android:label="借阅排行"
+            android:parentActivityName=".Activities.MainActivity"/>
+        <activity
+            android:name=".Activities.RecommendActivity"
+            android:label="新书推荐"
+            android:parentActivityName=".Activities.MainActivity"></activity>
     </application>
 
 </manifest>

@@ -56,7 +56,6 @@ public class ShowBookChineseInfo extends BaseActivity {
             public void run() {
                 InternetConnection in = new InternetConnection(titleUrl,path);
                 String responseInformation = in.getResponse();
-                Log.d("ShowBookCineseInfo1",responseInformation);
                 //解析返回的数据
                 Document document = Jsoup.parse(responseInformation);
                 Elements elements = document.getElementsByClass("td1");
@@ -76,10 +75,10 @@ public class ShowBookChineseInfo extends BaseActivity {
                 message.what = SHOW_CHINESE_INFO;
                 message.obj = sb.toString();
                 handler.sendMessage(message);
-//                        Intent intent = new Intent(SearchBook.this,ShowBookChineseInfo.class);
+//                        Intent intent = new Intent(SearchBookFragment.this,ShowBookChineseInfo.class);
 //                        intent.putExtra("information",sb.toString());
 //
-//                        Log.d("SearchBook",responseInformation);
+//                        Log.d("SearchBookFragment",responseInformation);
 //                        startActivity(intent);
                     }
                 }).start();

@@ -1,7 +1,6 @@
 package com.bookmanager.eidian.bookmanager.Fragments;
 
 
-
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
@@ -10,14 +9,13 @@ import android.view.ViewGroup;
 
 import com.bookmanager.eidian.bookmanager.R;
 
-
 /**
  * A simple {@link Fragment} subclass.
  */
-public class Settings extends Fragment {
+public class SearchBookFragment extends Fragment {
 
 
-    public Settings() {
+    public SearchBookFragment() {
         // Required empty public constructor
     }
 
@@ -26,7 +24,7 @@ public class Settings extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_settings, container, false);
+        return inflater.inflate(R.layout.fragment_search_book, container, false);
     }
 
 }

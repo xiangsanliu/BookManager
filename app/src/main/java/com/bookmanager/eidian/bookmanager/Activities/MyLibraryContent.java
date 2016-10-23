@@ -46,6 +46,7 @@ public class MyLibraryContent extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_library_content);
         final String url = getIntent().getStringExtra("url");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         recyclerView = (RecyclerView) findViewById(R.id.my_library_content);
         recyclerView.addItemDecoration(new SpacesItemDecoration(1));

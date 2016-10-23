@@ -144,18 +144,15 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 Document document = null;
                 try {
                     document =  Jsoup.connect("http://211.69.140.4:8991/F").get();
-                    Log.d("LogActivity",document.text());
 
                     Elements elements = document.getElementsByTag("a");
                     Node mNode = elements.first();
 
                     String path = mNode.attr("href");
-                    Log.d("594375984", mNode.attr("href"));
 
                     myLibrary.setMyLogin(elements.first().attr("href"));
 
 
-                    Log.d("sduifwaefowij", myLibrary.getMyLogin());
 
                     URL url1 = new URL(path);
                     HttpURLConnection connection1 = (HttpURLConnection) url1.openConnection();
@@ -177,7 +174,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                             .append("&bor_verification=" + URLEncoder.encode(password, "UTF-8"))
                             .append("&bor_library=HZA50");
 
-                    Log.d("11111111", sb.toString());
                     String parame = sb.toString();
                     byte[] postParame = parame.getBytes();
                     Log.d("sdoeiwoewweew", parame);

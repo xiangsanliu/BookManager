@@ -1,28 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <group android:checkableBehavior="single">
-        <item
-            android:id="@+id/home_page"
-            android:icon="@drawable/ic_home_black_24dp"
-            android:title="主页"/>
-        <item
-            android:id="@+id/book_search"
-            android:icon="@drawable/ic_book_black_24dp"
-            android:title="馆藏查询" />
-        <item
-            android:id="@+id/my_library"
-            android:icon="@drawable/ic_local_library_black_24dp"
-            android:title="我的图书馆" />
-        <item
-            android:id="@+id/recommend"
-            android:icon="@drawable/ic_chrome_reader_mode_black_24dp"
-            android:title="新书推荐" />
-        <item
-            android:id="@+id/rank"
-            android:icon="@drawable/ic_line_style_black_24dp"
-            android:title="借阅排行"/>
-    </group>
+    <item
+        android:id="@+id/book_search"
+        android:icon="@drawable/ic_book_black_24dp"
+        android:title="馆藏查询" />
+    <item
+        android:id="@+id/my_library"
+        android:icon="@drawable/ic_local_library_black_24dp"
+        android:title="我的图书馆" />
+    <item
+        android:id="@+id/recommend"
+        android:icon="@drawable/ic_chrome_reader_mode_black_24dp"
+        android:title="新书推荐" />
+    <item
+        android:id="@+id/rank"
+        android:icon="@drawable/ic_line_style_black_24dp"
+        android:title="借阅排行"/>
 
     <item android:title="更多功能">
         <menu>
