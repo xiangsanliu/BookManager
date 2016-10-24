@@ -87,7 +87,6 @@
             android:label="新书推荐"
             android:parentActivityName=".Activities.MainActivity" />
         <activity android:name=".Activities.BmobReaderAddBook" />
-        <activity android:name=".Activities.BmobReaderQueryBook" />
         <activity android:name=".Activities.BmobReaderQueryBookActivity"></activity>
     </application>
 

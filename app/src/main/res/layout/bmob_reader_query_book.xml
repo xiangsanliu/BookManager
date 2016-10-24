@@ -40,11 +40,12 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_alignEnd="@+id/bmob_query_book_button"
-        android:id="@+id/bmob_query_add_button" />
+        android:id="@+id/bmob_reader_query_add_button" />
     <ListView
         android:id="@+id/bmob_query_book_listview"
-        android:layout_below="@+id/bmob_query_book_edit"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"></ListView>
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_below="@+id/bmob_query_book_button"/>
 
 </RelativeLayout>

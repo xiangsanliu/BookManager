@@ -3,6 +3,7 @@ package com.bookmanager.eidian.bookmanager.Activities;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -39,12 +40,12 @@ public class BmobReaderQueryBookActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.bmob_reader_query_book);
         Bmob.initialize(this,"d882083bc95b77c5c072cbcc4264078d");
-        addButton = (Button) findViewById(R.id.bmob_query_add_button);
+        addButton = (Button) findViewById(R.id.bmob_reader_query_add_button);
         queryBookButton = (Button) findViewById(R.id.bmob_query_book_button);
         bNameEdit = (EditText) findViewById(R.id.bmob_query_book_edit);
         queryBookListView = (ListView) findViewById(R.id.bmob_query_book_listview);
 
-        addButton.setOnClickListener(new View.OnClickListener() {
+        queryBookButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String bName = bNameEdit.getText().toString();
@@ -66,9 +67,13 @@ public class BmobReaderQueryBookActivity extends AppCompatActivity {
                                 readerBook.setbOwner(readerBook1.getbOwner());
                                 queryBookList.add(readerBook);
                             }
+                            Log.d("BmobReaderQueryBook",queryBookList.toString());
                             adapter = new BmobQueryBookAdapter(BmobReaderQueryBookActivity.this,
                                     R.layout.item_bmob_query_book_view,queryBookList);
                             queryBookListView.setAdapter(adapter);
+                        }else {
+
+                            Log.d("BomobReaderQueryBookEr",e.getMessage());
                         }
                     }
                 });

@@ -54,7 +54,5 @@ public class BmobQueryBookAdapter extends ArrayAdapter<ReaderBook> {
         TextView bName;
         TextView bAuthor;
         TextView bOwner;
-
-
     }
 }
