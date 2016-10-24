@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.bookmanager.eidian.bookmanager.Adapters.BmobQueryBookAdapter;
 import com.bookmanager.eidian.bookmanager.Entities.ReaderBook;
@@ -72,7 +73,7 @@ public class BmobReaderQueryBookActivity extends AppCompatActivity {
                                     R.layout.item_bmob_query_book_view,queryBookList);
                             queryBookListView.setAdapter(adapter);
                         }else {
-
+                            Toast.makeText(BmobReaderQueryBookActivity.this,"未搜索到书籍",Toast.LENGTH_SHORT).show();
                             Log.d("BomobReaderQueryBookEr",e.getMessage());
                         }
                     }
