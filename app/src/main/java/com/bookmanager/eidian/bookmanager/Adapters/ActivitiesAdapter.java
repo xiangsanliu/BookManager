@@ -1,7 +1,6 @@
 package com.bookmanager.eidian.bookmanager.Adapters;
 
-import android.content.Context;
-import android.support.annotation.NonNull;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +9,7 @@ import android.widget.TextView;
 
 
 import com.bookmanager.eidian.bookmanager.Entities.Activities;
+import com.bookmanager.eidian.bookmanager.Entities.Notice;
 import com.bookmanager.eidian.bookmanager.R;
 
 import java.util.List;
@@ -18,35 +18,58 @@ import java.util.List;
  * Created by xiang on 2016/9/24/024.
  */
 
-public class ActivitiesAdapter extends ArrayAdapter<Activities> {
+public class ActivitiesAdapter extends RecyclerView.Adapter<ActivitiesAdapter.AViewHolder> {
 
-    private int resourceId;
+    private List<Activities> list;
 
-    public ActivitiesAdapter(Context context, int resource, List<Activities> objects) {
-        super(context, resource, objects);
-        resourceId = resource;
+    public ActivitiesAdapter(List<Activities> objects) {
+        this.list = objects;
     }
 
-    @NonNull
+    public interface OnItemClickListener {
+        void onItemClick(View view, int position);
+    }
+
+    private NoticeAdapter.OnItemClickListener onItemClickListener;
+
+    public void setOnItemClickListenner(NoticeAdapter.OnItemClickListener onItemClickListenner){
+        this.onItemClickListener = onItemClickListenner;
+    }
+
+
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        Activities activities = getItem(position);
-        View view;
-        ViewHolder viewHolder;
-        if(convertView == null ){
-            view = LayoutInflater.from(getContext()).inflate(resourceId, null);
-            viewHolder = new ViewHolder();
-            viewHolder.newsTitle = (TextView) view.findViewById(R.id.activity_title);
-            view.setTag(viewHolder); //将ViewHolder存储在View中
+    public ActivitiesAdapter.AViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.notice_item, parent,false);
+        ActivitiesAdapter.AViewHolder viewHolder = new ActivitiesAdapter.AViewHolder(view);
+        return viewHolder;
+    }
+
+    @Override
+    public void onBindViewHolder(final AViewHolder holder, int position) {
+        holder.noticeTitle.setText(list.get(position).getTitle());
+        if (onItemClickListener!= null) {
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int pos = holder.getLayoutPosition();
+                    onItemClickListener.onItemClick(holder.itemView, pos);
+                }
+            });
         }
-        else {
-            view = convertView;
-            viewHolder = (ViewHolder) view.getTag(); //重新获取ViewHolder
+    }
+
+
+    @Override
+    public int getItemCount() {
+        return list.size();
+    }
+
+    class AViewHolder extends RecyclerView.ViewHolder{
+        TextView noticeTitle;
+        public AViewHolder(View itemView) {
+            super(itemView);
+            noticeTitle = (TextView) itemView.findViewById(R.id.notice_title);
         }
-        viewHolder.newsTitle.setText(activities.getTitle());
-        return view;
-    } //对控件的实例进行缓存
-    class ViewHolder {
-        TextView newsTitle;
     }
 }

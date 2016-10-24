@@ -2,6 +2,7 @@ package com.bookmanager.eidian.bookmanager.Adapters;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,35 +18,58 @@ import java.util.List;
  * Created by lune on 2016/9/24/024.
  */
 
-public class NoticeAdapter extends ArrayAdapter<Notice> {
+public class NoticeAdapter extends RecyclerView.Adapter<NoticeAdapter.MyViewHolder> {
 
-    private int resourceId;
+    private List<Notice> list;
 
-    public NoticeAdapter(Context context, int resource, List<Notice> objects) {
-        super(context, resource, objects);
-        resourceId = resource;
+    public NoticeAdapter(List<Notice> objects) {
+        this.list = objects;
     }
 
-    @NonNull
+    public interface OnItemClickListener {
+        void onItemClick(View view, int position);
+    }
+
+    private OnItemClickListener onItemClickListener;
+
+    public void setOnItemClickListenner(OnItemClickListener onItemClickListenner){
+        this.onItemClickListener = onItemClickListenner;
+    }
+
+
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        View view = null;
-        Notice notice = getItem(position);
-        ViewHolder viewHolder;
-        if(convertView == null ){
-            view = LayoutInflater.from(getContext()).inflate(resourceId, null);
-            viewHolder = new ViewHolder();
-            viewHolder.noticeTitle = (TextView) view.findViewById(R.id.notice_title);
-            view.setTag(viewHolder); //将ViewHolder存储在View中
-        }
-        else {
-            view = convertView;
-            viewHolder = (ViewHolder) view.getTag(); //重新获取ViewHolder
-        }
-        viewHolder.noticeTitle.setText(notice.getTitle());
-        return view;
+    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.notice_item, parent,false);
+        MyViewHolder viewHolder = new MyViewHolder(view);
+        return viewHolder;
     }
-    class ViewHolder{
+
+    @Override
+    public void onBindViewHolder(final MyViewHolder holder, int position) {
+        holder.noticeTitle.setText(list.get(position).getTitle());
+        if (onItemClickListener!= null) {
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int pos = holder.getLayoutPosition();
+                    onItemClickListener.onItemClick(holder.itemView, pos);
+                }
+            });
+        }
+    }
+
+    @Override
+    public int getItemCount() {
+        return list.size();
+    }
+
+    class MyViewHolder extends RecyclerView.ViewHolder{
         TextView noticeTitle;
+
+        public MyViewHolder(View itemView) {
+            super(itemView);
+            noticeTitle = (TextView) itemView.findViewById(R.id.notice_title);
+        }
     }
 }

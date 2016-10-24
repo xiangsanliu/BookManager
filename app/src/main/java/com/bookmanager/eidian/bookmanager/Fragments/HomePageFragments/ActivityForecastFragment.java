@@ -7,6 +7,8 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,7 +19,10 @@ import android.widget.Toast;
 
 import com.bookmanager.eidian.bookmanager.Activities.ActivityContentActivity;
 import com.bookmanager.eidian.bookmanager.Adapters.ActivitiesAdapter;
+import com.bookmanager.eidian.bookmanager.Adapters.NoticeAdapter;
+import com.bookmanager.eidian.bookmanager.Adapters.SpacesItemDecoration;
 import com.bookmanager.eidian.bookmanager.Entities.Activities;
+import com.bookmanager.eidian.bookmanager.Entities.Notice;
 import com.bookmanager.eidian.bookmanager.Helpers.Connection;
 import com.bookmanager.eidian.bookmanager.R;
 
@@ -38,7 +43,7 @@ public class ActivityForecastFragment extends Fragment {
     private static ActivityForecastFragment instance=null;
 
     private List<Activities> activitiesList;
-    ListView listView ;
+    RecyclerView recyclerView ;
 
     private static final int SHOW_RESPONSE = 0;
 
@@ -47,13 +52,13 @@ public class ActivityForecastFragment extends Fragment {
             switch (msg.what){
                 case SHOW_RESPONSE:
                     Object newsResponse = msg.obj;
-                    final ActivitiesAdapter activitiesAdapter = new ActivitiesAdapter(getActivity(), R.layout.activities_item, (List<Activities>) newsResponse );
-                    listView.setAdapter(activitiesAdapter);
+                    final ActivitiesAdapter adapter = new ActivitiesAdapter((List<Activities>) newsResponse);
+                    recyclerView.setAdapter(adapter);
                     swipeRefreshLayout.setRefreshing(false);
                     Toast.makeText(getActivity(), "数据刷新成功", Toast.LENGTH_SHORT).show();
-                    listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    adapter.setOnItemClickListenner(new NoticeAdapter.OnItemClickListener() {
                         @Override
-                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        public void onItemClick(View view, int position) {
                             String flag = "ActivityForecastFragment";
                             try {
                                 Intent intent = new Intent(getActivity(), ActivityContentActivity.class);
@@ -85,7 +90,9 @@ public class ActivityForecastFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_activity_forecast, container, false);
-        listView = (ListView) view.findViewById(R.id.list_view);
+        recyclerView = (RecyclerView) view.findViewById(R.id.list_view);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.addItemDecoration(new SpacesItemDecoration(1));
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_to_refresh);
 
         SwipeRefreshLayout.OnRefreshListener onRefreshListener = new SwipeRefreshLayout.OnRefreshListener() {

@@ -7,6 +7,8 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +19,7 @@ import android.widget.Toast;
 
 import com.bookmanager.eidian.bookmanager.Activities.ActivityContentActivity;
 import com.bookmanager.eidian.bookmanager.Adapters.NoticeAdapter;
+import com.bookmanager.eidian.bookmanager.Adapters.SpacesItemDecoration;
 import com.bookmanager.eidian.bookmanager.Entities.Notice;
 import com.bookmanager.eidian.bookmanager.Helpers.Connection;
 import com.bookmanager.eidian.bookmanager.R;
@@ -37,7 +40,7 @@ import java.util.List;
  */
 public class NoticeFragment extends Fragment {
 
-    private ListView listView ;
+    private RecyclerView recyclerView ;
 
     private List<Notice> noticeList;
 
@@ -49,12 +52,12 @@ public class NoticeFragment extends Fragment {
             switch (msg.what) {
                 case 0:
                     Object newsResponse = msg.obj;
-                    final NoticeAdapter noticeAdapter = new NoticeAdapter(getActivity(), R.layout.notice_item, (List<Notice>) newsResponse );
-                    listView.setAdapter(noticeAdapter);
+                    final NoticeAdapter noticeAdapter = new NoticeAdapter((List<Notice>) newsResponse );
+                    recyclerView.setAdapter(noticeAdapter);
                     swipeRefreshLayout.setRefreshing(!swipeRefreshLayout.isRefreshing());
-                    listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    noticeAdapter.setOnItemClickListenner(new NoticeAdapter.OnItemClickListener() {
                         @Override
-                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        public void onItemClick(View view, int position) {
                             String flag = "NoticeFragment";
                             try {
                                 Intent intent = new Intent(getActivity(), ActivityContentActivity.class);
@@ -66,7 +69,7 @@ public class NoticeFragment extends Fragment {
                                 e.printStackTrace();
                             }
                         }
-                    });
+                    }) ;
                     Toast.makeText(getActivity(), "数据刷新成功", Toast.LENGTH_SHORT).show();
 
 
@@ -93,7 +96,9 @@ public class NoticeFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view =  inflater.inflate(R.layout.fragment_notice, container, false);
-        listView = (ListView) view.findViewById(R.id.notice_list);
+        recyclerView = (RecyclerView) view.findViewById(R.id.notice_list);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.addItemDecoration(new SpacesItemDecoration(1));
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_to_refresh);
 
         SwipeRefreshLayout.OnRefreshListener onRefreshListener = new SwipeRefreshLayout.OnRefreshListener() {
