@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.widget.TextView;
 
@@ -39,6 +40,9 @@ public class Show_new_book_message extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hot_new_book_msg);
         view = (TextView) findViewById(R.id.show_new_book_msg);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         Intent intent = getIntent();
         final String path = intent.getStringExtra("pathUrl");
         new Thread(new Runnable() {

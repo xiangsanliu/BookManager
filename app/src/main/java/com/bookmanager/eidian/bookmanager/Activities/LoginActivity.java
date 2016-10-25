@@ -10,6 +10,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -117,6 +118,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         rememberPass = (CheckBox) findViewById(R.id.remember_passward);
         passwordEdit = (EditText) findViewById(R.id.password);
         login.setOnClickListener(this);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         boolean isRemember = pref.getBoolean("remember_password_lib",false);
         if (isRemember){

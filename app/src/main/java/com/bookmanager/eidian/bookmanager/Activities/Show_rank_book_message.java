@@ -3,6 +3,7 @@ package com.bookmanager.eidian.bookmanager.Activities;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.widget.TextView;
 
@@ -27,6 +28,9 @@ public class Show_rank_book_message extends BaseActivity {
         setContentView(R.layout.activity_hot_rank_book_msg);
         Intent intent = getIntent();
         final String path = intent.getStringExtra("path");
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         new Thread(new Runnable() {
             @Override
             public void run() {

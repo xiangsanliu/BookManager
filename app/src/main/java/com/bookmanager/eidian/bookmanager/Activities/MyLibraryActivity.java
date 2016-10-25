@@ -7,6 +7,7 @@ import android.os.Message;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -36,6 +37,7 @@ public class MyLibraryActivity extends BaseActivity {
 
     static  final  int SHOW_RESPONSE = 0;
 
+    Toolbar toolbar;
 
     //当未获取到myLibrary信息时
     int al=0;
@@ -107,6 +109,9 @@ public class MyLibraryActivity extends BaseActivity {
         history_num = (Button) findViewById(R.id.history_num);
         booked_num = (Button) findViewById(R.id.booked_num);
         pre_num = (Button) findViewById(R.id.pre_num);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         Intent intent = getIntent();
         final String myLibrary1 = intent.getStringExtra("myLibrary");

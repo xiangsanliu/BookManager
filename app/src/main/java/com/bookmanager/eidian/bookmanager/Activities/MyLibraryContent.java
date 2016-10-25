@@ -1,13 +1,11 @@
 package com.bookmanager.eidian.bookmanager.Activities;
 
-import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+import android.support.v7.widget.Toolbar;
 
 import com.bookmanager.eidian.bookmanager.Adapters.MyLibraryBookAdapter;
 import com.bookmanager.eidian.bookmanager.Adapters.SpacesItemDecoration;
@@ -30,6 +28,7 @@ public class MyLibraryContent extends BaseActivity {
     RecyclerView recyclerView;
     private MyLibraryBookAdapter adapter;
     List<MyLibraryBook> list;
+    Toolbar toolbar;
 
     Handler handler = new Handler(){
         @Override
@@ -46,7 +45,10 @@ public class MyLibraryContent extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_library_content);
         final String url = getIntent().getStringExtra("url");
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
 
         recyclerView = (RecyclerView) findViewById(R.id.my_library_content);
         recyclerView.addItemDecoration(new SpacesItemDecoration(1));

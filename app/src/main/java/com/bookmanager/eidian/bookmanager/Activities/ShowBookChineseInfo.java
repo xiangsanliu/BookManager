@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -49,6 +50,9 @@ public class ShowBookChineseInfo extends BaseActivity {
         showChineseInfo = (TextView) findViewById(R.id.show_chinese_info);
         Intent intent = getIntent();
         final String titleUrl = intent.getStringExtra("titleUrl");
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         final String path = intent.getStringExtra("path");
         new Thread(new Runnable() {

@@ -3,6 +3,7 @@ package com.bookmanager.eidian.bookmanager.Activities;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -45,6 +46,9 @@ public class BmobReaderQueryBookActivity extends AppCompatActivity {
         queryBookButton = (Button) findViewById(R.id.bmob_query_book_button);
         bNameEdit = (EditText) findViewById(R.id.bmob_query_book_edit);
         queryBookListView = (ListView) findViewById(R.id.bmob_query_book_listview);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         queryBookButton.setOnClickListener(new View.OnClickListener() {
             @Override

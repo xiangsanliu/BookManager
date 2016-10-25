@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -40,6 +41,9 @@ public class BorrowingBookImformation extends AppCompatActivity {
         setContentView(R.layout.activity_borrowing_book_imformation);
         renew_button = (Button) findViewById(R.id.renew);
         textView = (TextView) findViewById(R.id.borrowing_book_content);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         final String url = getIntent().getStringExtra("url");
         final String book_url = getIntent().getStringExtra("book_url");
 

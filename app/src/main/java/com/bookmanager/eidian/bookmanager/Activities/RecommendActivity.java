@@ -5,6 +5,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -81,6 +82,9 @@ public class RecommendActivity extends AppCompatActivity {
         materialRefreshLayout = (MaterialRefreshLayout) findViewById(R.id.swipe_to_refresh);
         Intent intent = getIntent();
         str = intent.getStringExtra("str");
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
         new Thread(new Runnable() {

@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 
 import com.bookmanager.eidian.bookmanager.Adapters.MyLibraryBookAdapter;
@@ -43,6 +44,9 @@ public class BorrowingContent extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_borrowing);
         final String url = getIntent().getStringExtra("url");
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         recyclerView = (RecyclerView) findViewById(R.id.borrowing_content);
         recyclerView.addItemDecoration(new SpacesItemDecoration(1));

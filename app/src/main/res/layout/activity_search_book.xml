@@ -5,11 +5,24 @@
     android:id="@+id/activity_search_book"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.bookmanager.eidian.bookmanager.Activities.SearchBookActivity">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:elevation="0dp"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            app:layout_scrollFlags="enterAlways|scroll"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            android:layout_gravity="center_horizontal"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+    </android.support.design.widget.AppBarLayout>
 
     <com.cjj.MaterialRefreshLayout
         android:id="@+id/refresh"
@@ -18,6 +31,7 @@
         android:layout_height="match_parent">
         <ListView
             android:id="@+id/show_result"
+            android:paddingTop="?attr/actionBarSize"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </com.cjj.MaterialRefreshLayout>
