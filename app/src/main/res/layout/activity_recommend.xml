@@ -29,9 +29,10 @@
         android:layout_width="match_parent"
         android:id="@+id/swipe_to_refresh"
         android:layout_height="match_parent">
-        <ListView
+        <android.support.v7.widget.RecyclerView
             android:paddingTop="?attr/actionBarSize"
             android:id="@+id/show_hotmessage"
+            android:clipToPadding="false"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </com.cjj.MaterialRefreshLayout>

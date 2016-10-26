@@ -5,6 +5,8 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
@@ -12,6 +14,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.bookmanager.eidian.bookmanager.Adapters.HotMessageAdapter;
+import com.bookmanager.eidian.bookmanager.Adapters.SpacesItemDecoration;
 import com.bookmanager.eidian.bookmanager.Helpers.HotMsg;
 import com.bookmanager.eidian.bookmanager.R;
 import com.cjj.MaterialRefreshLayout;
@@ -30,7 +33,7 @@ public class RecommendActivity extends AppCompatActivity {
 
     private List<HotMsg> hotMsgList = new ArrayList<HotMsg>();
 
-    private ListView hotmsgView;
+    private RecyclerView hotmsgView;
 
     private MaterialRefreshLayout materialRefreshLayout;
 
@@ -48,21 +51,20 @@ public class RecommendActivity extends AppCompatActivity {
             switch (msg.what){
                 case SHOW_NEW_RESPONSE:
                     Object responseNew = msg.obj;
-                    hAdapter = new HotMessageAdapter(RecommendActivity.this,
-                            R.layout.item_hot_message_view, (List<HotMsg>) responseNew);
+                    hAdapter = new HotMessageAdapter((List<HotMsg>) responseNew);
                     hotmsgView.setAdapter(hAdapter);
-                    hotmsgView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                            HotMsg hotMsg = hotMsgList.get(i);
-                            String path = str+"find-b&find_code=SYS&local_base=HZA01&request="+
-                                    hotMsg.getBookMessageUrl()+"&con_lng=chi";
-                            Intent intent = new Intent(RecommendActivity.this,Show_new_book_message.class);
-                            intent.putExtra("pathUrl",path);
-
-                            startActivity(intent);
-                        }
-                    });
+//                    hotmsgView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//                        @Override
+//                        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+//                            HotMsg hotMsg = hotMsgList.get(i);
+//                            String path = str+"find-b&find_code=SYS&local_base=HZA01&request="+
+//                                    hotMsg.getBookMessageUrl()+"&con_lng=chi";
+//                            Intent intent = new Intent(RecommendActivity.this,Show_new_book_message.class);
+//                            intent.putExtra("pathUrl",path);
+//
+//                            startActivity(intent);
+//                        }
+//                    });
                     break;
                 case 2:
                     hAdapter.notifyDataSetChanged();
@@ -78,7 +80,10 @@ public class RecommendActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recommend);
 
-        hotmsgView = (ListView) findViewById(R.id.show_hotmessage);
+        hotmsgView = (RecyclerView) findViewById(R.id.show_hotmessage);
+
+        hotmsgView.setLayoutManager(new LinearLayoutManager(this));
+        hotmsgView.addItemDecoration(new SpacesItemDecoration(1));
         materialRefreshLayout = (MaterialRefreshLayout) findViewById(R.id.swipe_to_refresh);
         Intent intent = getIntent();
         str = intent.getStringExtra("str");

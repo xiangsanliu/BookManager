@@ -1,6 +1,7 @@
 package com.bookmanager.eidian.bookmanager.Adapters;
 
 import android.content.Context;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,32 +18,42 @@ import java.util.List;
  * Created by clmiberf on 2016/10/11.
  */
 
-public class HotMessageAdapter extends ArrayAdapter<HotMsg>{
-    private int resourceId;
+public class HotMessageAdapter extends RecyclerView.Adapter<HotMessageAdapter.RankViewHolder> {
 
     private TextView hotData;
 
-    public HotMessageAdapter(Context context, int textViewResourceId, List<HotMsg> objects) {
-        super(context,textViewResourceId, objects);
-        resourceId = textViewResourceId;
+    private List<HotMsg> list;
+
+
+    public HotMessageAdapter(List<HotMsg> list) {
+        this.list = list;
     }
 
-
+    @Override
+    public RankViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_hot_message_view, parent, false);
+        RankViewHolder viewHolder = new RankViewHolder(view);
+        return viewHolder;
+    }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        HotMsg msg = getItem(position);
-        View view;
-        if (convertView == null){
-            view = LayoutInflater.from(getContext()).inflate(resourceId,null);
-            hotData = (TextView) view.findViewById(R.id.hot_book_name);
-            view.setTag(hotData);
-        }else {
-            view = convertView;
-            hotData = (TextView) view.getTag();
+    public void onBindViewHolder(RankViewHolder holder, int position) {
+        holder.textView.setText(list.get(position).getBookMsg());
+    }
+
+    @Override
+    public int getItemCount() {
+        return list.size();
+    }
+
+    class RankViewHolder extends RecyclerView.ViewHolder{
+
+        TextView textView;
+
+        public RankViewHolder(View itemView) {
+            super(itemView);
+            textView = (TextView) itemView.findViewById(R.id.hot_book_name);
         }
-        hotData.setText(msg.getBookMsg());
-        return view;
     }
 
 }
