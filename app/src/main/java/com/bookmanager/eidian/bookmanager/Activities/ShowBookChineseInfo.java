@@ -64,7 +64,6 @@ public class ShowBookChineseInfo extends BaseActivity {
                 Document document = Jsoup.parse(responseInformation);
                 Elements elements = document.getElementsByClass("td1");
                 //存放书籍详细信息
-                Log.d("ShowBookChineseInfo2",elements.get(0).text());
                 StringBuilder sb = new StringBuilder();
 
 

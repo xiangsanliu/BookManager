@@ -8,6 +8,8 @@ import android.os.Message;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -18,6 +20,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 
 import com.bookmanager.eidian.bookmanager.Adapters.BookAdapter;
+import com.bookmanager.eidian.bookmanager.Adapters.SpacesItemDecoration;
 import com.bookmanager.eidian.bookmanager.Entities.Book;
 import com.bookmanager.eidian.bookmanager.Helpers.BaseActivity;
 import com.bookmanager.eidian.bookmanager.Helpers.InternetConnection;
@@ -41,7 +44,7 @@ public class SearchBookActivity extends BaseActivity {
 
     static final int SHOW_WESTERN_RESPONSE = 0;
 
-    private ListView listView;
+    private RecyclerView recyclerView;
 
     private String path;
 
@@ -67,36 +70,36 @@ public class SearchBookActivity extends BaseActivity {
             switch (message.what){
                 case SHOW_CHINESE_RESPONSE:
                     Object responseChinese =  message.obj;
-                    adapter = new BookAdapter(SearchBookActivity.this, R.layout.item_book_view, (List<Book>) responseChinese);
-                    listView.setAdapter(adapter);
+                    adapter = new BookAdapter((List<Book>) responseChinese);
+                    recyclerView.setAdapter(adapter);
                     adapter.notifyDataSetChanged();
-                    listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                            Book book = bookList.get(i);
-                            Intent intent = new Intent(SearchBookActivity.this, ShowBookChineseInfo.class);
-                            intent.putExtra("path",path);
-                            intent.putExtra("titleUrl",book.getTitleUrl());
-                            startActivity(intent);
-                        }
-                    });
+//                    listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//                        @Override
+//                        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+//                            Book book = bookList.get(i);
+//                            Intent intent = new Intent(SearchBookActivity.this, ShowBookChineseInfo.class);
+//                            intent.putExtra("path",path);
+//                            intent.putExtra("titleUrl",book.getTitleUrl());
+//                            startActivity(intent);
+//                        }
+//                    });
                     break;
                 case SHOW_WESTERN_RESPONSE:
                     Object responseWestern = message.obj;
-                    adapter1 = new BookAdapter(SearchBookActivity.this,R.layout.item_book_view, (List<Book>) responseWestern);
-                    listView.setAdapter(adapter1);
+                    adapter1 = new BookAdapter((List<Book>) responseWestern);
+                    recyclerView.setAdapter(adapter1);
                     adapter1.notifyDataSetChanged();
-                    listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                            Book book = bookList.get(i);
-                            String titleWesternUrl = book.getTitleUrl();
-                            Intent intent = new Intent(SearchBookActivity.this,ShowBookWesternInfo.class);
-                            intent.putExtra("titleWesternUrl",titleWesternUrl);
-                            intent.putExtra("path",path);
-                            startActivity(intent);
-                        }
-                    });
+//                    listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//                        @Override
+//                        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+//                            Book book = bookList.get(i);
+//                            String titleWesternUrl = book.getTitleUrl();
+//                            Intent intent = new Intent(SearchBookActivity.this,ShowBookWesternInfo.class);
+//                            intent.putExtra("titleWesternUrl",titleWesternUrl);
+//                            intent.putExtra("path",path);
+//                            startActivity(intent);
+//                        }
+//                    });
                     break;
                 case 3:
                     if (adapter!= null){
@@ -122,7 +125,9 @@ public class SearchBookActivity extends BaseActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        listView = (ListView) findViewById(R.id.show_result);
+        recyclerView = (RecyclerView) findViewById(R.id.show_result);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.addItemDecoration(new SpacesItemDecoration(1));
         materialRefreshLayout = (MaterialRefreshLayout) findViewById(R.id.refresh);
         //接受传来的数据
         Intent intent = getIntent();

@@ -44,8 +44,10 @@
             android:name=".Activities.LoginActivity"
             android:label="登陆"
             android:parentActivityName=".Activities.MainActivity" />
-        <activity android:name=".Activities.ShowBookChineseInfo" />
-        <activity android:name=".Activities.ShowBookWesternInfo" />
+        <activity android:name=".Activities.ShowBookChineseInfo"
+            android:parentActivityName=".Activities.MainActivity"/>
+        <activity android:name=".Activities.ShowBookWesternInfo"
+            android:parentActivityName=".Activities.MainActivity"/>
         <activity
             android:name=".Activities.SouthLakeActivity"
             android:label="南湖跑查询"
