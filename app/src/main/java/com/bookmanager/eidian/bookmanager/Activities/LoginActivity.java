@@ -48,65 +48,19 @@ import at.markushi.ui.CircleButton;
 public class LoginActivity extends BaseActivity implements View.OnClickListener {
 
     static final int SHOW_RESPONSE = 0;
-
     private SharedPreferences.Editor editor;
-
-
     private List<String> list;
-
     private SharedPreferences pref;
-
     private LibraryList myLibrary = new LibraryList();
-
     private CircleButton login;
-
     private EditText accountEdit;
-
     private EditText passwordEdit;
-
     private CheckBox rememberPass;
-
     private StringBuilder builder = new StringBuilder();
-
-
     //判断是否登陆成功或者是否获取到Library的URL
     int isSeccuss = 0;
 
-    private Handler handler = new Handler(){
-
-        public void handleMessage(Message msg){
-            switch (msg.what){
-                case SHOW_RESPONSE:
-                    String response = (String) msg.obj;
-//                    Intent intent = new Intent(Login.this,ShowActivity.class);
-//                    intent.putExtra("data_extra",response);
-//                    startActivity(intent);
-                    Log.d("Login", String.valueOf(isSeccuss));
-                    if (!response.equals("-1")) {
-                        Log.d("1222222222334345", response);
-                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                        intent.putExtra("search", list.get(4));
-                        intent.putExtra("myLibrary", list.get(0));
-                        intent.putExtra("hotMessage", list.get(1));
-                        intent.putExtra("reader", list.get(2));
-                        intent.putExtra("history", list.get(3));
-                        intent.putExtra("isLogined", true);
-                        startActivity(intent);
-                        finish();
-                    }else{
-                    AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
-                    builder.setMessage("哎呀~出错啦!");
-                    builder.setMessage("请检查账号和密码后重试");
-                    builder.setCancelable(false);
-                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {}
-                    });
-                    builder.show();
-                }
-            }
-        }
-    };
+    private Handler handler = new LoginHandler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -268,5 +222,41 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             }
         }).start();
 
+    }
+
+    class LoginHandler extends  Handler {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what){
+                case SHOW_RESPONSE:
+                    String response = (String) msg.obj;
+//                    Intent intent = new Intent(Login.this,ShowActivity.class);
+//                    intent.putExtra("data_extra",response);
+//                    startActivity(intent);
+                    Log.d("Login", String.valueOf(isSeccuss));
+                    if (!response.equals("-1")) {
+                        Log.d("1222222222334345", response);
+                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                        intent.putExtra("search", list.get(4));
+                        intent.putExtra("myLibrary", list.get(0));
+                        intent.putExtra("hotMessage", list.get(1));
+                        intent.putExtra("reader", list.get(2));
+                        intent.putExtra("history", list.get(3));
+                        intent.putExtra("isLogined", true);
+                        startActivity(intent);
+                        finish();
+                    }else{
+                        AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
+                        builder.setMessage("哎呀~出错啦!");
+                        builder.setMessage("请检查账号和密码后重试");
+                        builder.setCancelable(false);
+                        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {}
+                        });
+                        builder.show();
+                    }
+            }
+        }
     }
 }

@@ -20,20 +20,13 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
-public class BorrowingBookImformation extends AppCompatActivity {
+public class BorrowingBookImformation extends AppCompatActivity implements View.OnClickListener{
 
     String renew_url = "";
     Button renew_button;
     TextView textView;
-    Handler handler = new Handler(){
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            String content = (String) msg.obj;
-            textView.setText(content);
-
-        }
-    };
+    BorrowingBookThread thread = new BorrowingBookThread();
+    Handler handler = new BorrowingBookHandler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,42 +37,16 @@ public class BorrowingBookImformation extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        final String url = getIntent().getStringExtra("url");
-        final String book_url = getIntent().getStringExtra("book_url");
+        thread.setUrl(getIntent().getStringExtra("url"));
+        thread.setBook_url(getIntent().getStringExtra("book_url"));
+        thread.start();
+        renew_button.setOnClickListener(this);
+    }
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                if (!url.equals("a")) {
-                    InternetConnection internetConnection = new InternetConnection(url, url);
-                    Document document = Jsoup.parse(internetConnection.getResponse());
-                    renew_url = document.select("td.td1").get(5).select("A").attr("HREF");
-
-                } else {
-                    renew_button.setVisibility(View.GONE);
-                    renew_url = "";
-                }
-                InternetConnection internetConnection1 = new InternetConnection(book_url, book_url);
-                String s = internetConnection1.getResponse();
-                Document document1 = Jsoup.parse(s);
-                Elements elements = document1.select("tr");
-                String content = "";
-                for (int i=2;i<elements.size()-2;i++){
-                    content += elements.get(i).text() +"\n";
-                }
-
-                Message message = new Message();
-                message.obj = content;
-                handler.sendMessage(message);
-            }
-        }).start();
-
-
-
-        renew_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.renew:
                 if (renew_url.length()>0) {
 
                     android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(BorrowingBookImformation.this);
@@ -113,8 +80,52 @@ public class BorrowingBookImformation extends AppCompatActivity {
                             .setTitle("提示");
                     builder.create().show();
                 }
-            }
-        });
+                break;
+            default:
+        }
+    }
 
+    class BorrowingBookThread extends Thread {
+
+        String url, book_url;
+
+        public void setUrl(String url) {
+            this.url = url;
+        }
+
+        public void setBook_url(String book_url) {
+            this.book_url = book_url;
+        }
+
+        @Override
+        public void run() {
+            if (!url.equals("a")) {
+                InternetConnection internetConnection = new InternetConnection(url, url);
+                Document document = Jsoup.parse(internetConnection.getResponse());
+                renew_url = document.select("td.td1").get(5).select("A").attr("HREF");
+
+            } else {
+                renew_button.setVisibility(View.GONE);
+                renew_url = "";
+            }
+            InternetConnection internetConnection1 = new InternetConnection(book_url, book_url);
+            String s = internetConnection1.getResponse();
+            Document document1 = Jsoup.parse(s);
+            Elements elements = document1.select("tr");
+            String content = "";
+            for (int i=2;i<elements.size()-2;i++){
+                content += elements.get(i).text() +"\n";
+            }
+
+            Message message = new Message();
+            message.obj = content;
+            handler.sendMessage(message);
+        }
+    }
+    class BorrowingBookHandler extends  Handler {
+        @Override
+        public void handleMessage(Message msg) {
+            textView.setText((String) msg.obj);
+        }
     }
 }

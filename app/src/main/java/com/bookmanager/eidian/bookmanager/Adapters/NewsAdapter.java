@@ -83,6 +83,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
                 .getPhotoUrl()).resize(width,height/4).centerCrop().into(personViewHolder.news_enter);
 
         //为btn_share btn_readMore cardView设置点击事件
+        personViewHolder.cardView.setMinimumHeight(height/4);
         personViewHolder.cardView.setOnClickListener(new View.OnClickListener() {
             String flag = "NewsFragment";
             @Override

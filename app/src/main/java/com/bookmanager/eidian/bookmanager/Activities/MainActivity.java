@@ -65,7 +65,6 @@ public class MainActivity extends BaseActivity
     private String search;
     private List<String> list;
     private String myLibrary1;
-    private String hotMessage;
     private String str;
     private SharedPreferences pref;
     private LibraryList myLibrary = new LibraryList();
@@ -75,45 +74,9 @@ public class MainActivity extends BaseActivity
     String name;
     private TextView textView;
     private TextView textView1;
-
     int i ;
 
-    private Handler handler = new Handler(){
-
-        public void handleMessage(Message msg){
-            switch (msg.what){
-                case SHOW_RESPONSE:
-                    String response = (String) msg.obj;
-                    if (!response.equals("-1")) {
-                        search = list.get(4);
-                        myLibrary1 = list.get(0);
-
-                        i = search.length();
-                        str = search.substring(0,i-8);
-
-                        isLogined = true;
-                        Toast.makeText(MainActivity.this, "登陆成功", Toast.LENGTH_SHORT).show();
-                        textView.setText(name);
-                        textView1.setText(pref.getString("account_lib", " "));
-
-                    }else{
-                        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                        builder.setMessage("哎呀~出错啦!");
-                        builder.setMessage("请检查账号和密码后重试");
-                        builder.setCancelable(false);
-                        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                startActivity(new Intent(MainActivity.this, LoginActivity.class));
-                                Toast.makeText(MainActivity.this, "请重新登陆", Toast.LENGTH_SHORT).show();
-                                finish();
-                            }
-                        });
-                        builder.show();
-                    }
-            }
-        }
-    };
+    private Handler handler = new MainHandler();
 
     Toolbar toolbar;
 
@@ -130,116 +93,12 @@ public class MainActivity extends BaseActivity
         final String password = pref.getString("password_lib", " ");
         if ( (!account.equals(" ")) && (!password.equals(" ")) ){
             isAutoLogin = true;
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    Document document = null;
-                    try {
-                        document =  Jsoup.connect("http://211.69.140.4:8991/F").get();
-                        Elements elements = document.getElementsByTag("a");
-                        Node mNode = elements.first();
-                        String path = mNode.attr("href");
-                        myLibrary.setMyLogin(elements.first().attr("href"));
-                        URL url1 = new URL(path);
-                        HttpURLConnection connection1 = (HttpURLConnection) url1.openConnection();
-                        connection1.setConnectTimeout(8000);
-                        connection1.setRequestProperty("Accept", "text/html," +
-                                "application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
-                        connection1.setRequestProperty("Referer", path);
-                        connection1.setRequestProperty("User-Agent", "Mozilla/5.0 " +
-                                "(Windows NT 10.0; WOW64; rv:48.0) Gecko/20100101 Firefox/48.0");
-                        connection1.setRequestProperty("Host", "211.69.140.4:8991");
-                        connection1.setRequestProperty("Cache-Control", "no-cache, no-store, must-revalidate");
-                        connection1.setRequestProperty("Upgrade-Insecure-Requests", "1");
-                        connection1.setRequestMethod("POST");
-                        //设置请求体
-                        StringBuilder sb = new StringBuilder();
-                        sb.append("func=login-session")
-                                .append("&login_source=bor-info")
-                                .append("&bor_id=" + URLEncoder.encode(account, "UTF-8"))
-                                .append("&bor_verification=" + URLEncoder.encode(password, "UTF-8"))
-                                .append("&bor_library=HZA50");
-                        String parame = sb.toString();
-                        byte[] postParame = parame.getBytes();
-                        //提交请求体
-                        DataOutputStream out = new DataOutputStream(connection1.getOutputStream());
-                        out.write(postParame);
-                        out.flush();
-                        out.close();
-                        String cookieVal = null;
-                        String cookie = null;
-                        String key = null;
-                        int n = 0;
-                        if (connection1.getResponseCode() == 200) {
-                            InputStream in = connection1.getInputStream();
-                            //获取流中的数据
-                            BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-                            StringBuilder response = new StringBuilder();
-                            String line;
-                            while ((line = reader.readLine()) != null) {
-                                response.append(line);
-                            }
-
-                            Document document1 = Jsoup.parse(response.toString());
-                            Element elements1 = document1.getElementById("header");
-                            Elements elements2 = document1.select("td.td2");
-                            if (elements2.size()>1) {
-                                name = elements2.get(1).text();
-                            }
-                            String isLogin = elements1.getElementsByTag("a").first().text();
-                            if (isLogin.equals("退出")) {
-                                //list用来存放各类url
-                                list = new ArrayList<String>();
-                                //获取各类信息网页
-                                //我的图书馆的信息
-                                myLibrary.setMyLibrary(elements1.childNode(5).attr("href"));
-                                list.add(myLibrary.getMyLibrary());
-//                       builder.append(myLibrary.getMyLibrary());
-                                //热门推荐
-                                myLibrary.setHotMessage(elements1.childNode(16).attr("href"));
-                                list.add(myLibrary.getHotMessage());
-//                       builder.append(myLibrary.getHotMessage());
-                                //读者推荐
-                                myLibrary.setReaderRecommend(elements1.childNode(11).attr("href"));
-                                list.add(myLibrary.getReaderRecommend());
-                                //搜索结果
-                                myLibrary.setHistory(elements1.childNode(20).attr("href"));
-                                list.add(myLibrary.getHistory());
-                                //搜索
-                                myLibrary.setSearch(elements1.childNode(3).attr("href"));
-                                list.add(myLibrary.getSearch());
-                                builder.append(myLibrary);
-                                InternetConnection ic = new InternetConnection(myLibrary.getMyLibrary(), path);
-                                Message message = new Message();
-
-                                message.what = SHOW_RESPONSE;
-                                message.obj = ic.getResponse();
-                                handler.sendMessage(message);
-                            }else {
-                                //使用异步消息处理机制传输数据
-                                Message message = new Message();
-
-                                message.what = SHOW_RESPONSE;
-                                message.obj = "-1";
-                                handler.sendMessage(message);
-                            }
-                        }
-
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-
-                }
-            }).start();
+            loginIn(account, password);
         }
-
-
-
-
         if (isLogined && !isAutoLogin) {
             search = intent.getStringExtra("search");
             myLibrary1 = intent.getStringExtra("myLibrary");
-            hotMessage = intent.getStringExtra("hotMessage");
+            String hotMessage = intent.getStringExtra("hotMessage");
             //获取相同的参数
             i = search.length();
             str = search.substring(0,i-8);
@@ -382,8 +241,17 @@ public class MainActivity extends BaseActivity
                 feedBackDialogFragment.show(fragmentManager, "MainActivity");
                 break;
             case R.id.help_each_other:
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle("提示")
+                        .setMessage("模块正在加紧开发中，敬请期待！")
+                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
 
-                startActivity(new Intent(MainActivity.this,BmobReaderQueryBookActivity.class));
+                            }
+                        }).create();
+                builder.show();
+                //startActivity(new Intent(MainActivity.this,BmobReaderQueryBookActivity.class));
                 break;
         }
         invalidateOptionsMenu();
@@ -391,8 +259,6 @@ public class MainActivity extends BaseActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-
-
 
     private void initViewPagerHomePage() {
         ViewPager viewPager = (ViewPager) findViewById(R.id.viewPager);
@@ -405,5 +271,144 @@ public class MainActivity extends BaseActivity
         tabLayout.setupWithViewPager(viewPager);
     }
 
+    private void loginIn(final String account, final String password) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Document document = null;
+                try {
+                    document =  Jsoup.connect("http://211.69.140.4:8991/F").get();
+                    Elements elements = document.getElementsByTag("a");
+                    Node mNode = elements.first();
+                    String path = mNode.attr("href");
+                    myLibrary.setMyLogin(elements.first().attr("href"));
+                    URL url1 = new URL(path);
+                    HttpURLConnection connection1 = (HttpURLConnection) url1.openConnection();
+                    connection1.setConnectTimeout(8000);
+                    connection1.setRequestProperty("Accept", "text/html," +
+                            "application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
+                    connection1.setRequestProperty("Referer", path);
+                    connection1.setRequestProperty("User-Agent", "Mozilla/5.0 " +
+                            "(Windows NT 10.0; WOW64; rv:48.0) Gecko/20100101 Firefox/48.0");
+                    connection1.setRequestProperty("Host", "211.69.140.4:8991");
+                    connection1.setRequestProperty("Cache-Control", "no-cache, no-store, must-revalidate");
+                    connection1.setRequestProperty("Upgrade-Insecure-Requests", "1");
+                    connection1.setRequestMethod("POST");
+                    //设置请求体
+                    StringBuilder sb = new StringBuilder();
+                    sb.append("func=login-session")
+                            .append("&login_source=bor-info")
+                            .append("&bor_id=" + URLEncoder.encode(account, "UTF-8"))
+                            .append("&bor_verification=" + URLEncoder.encode(password, "UTF-8"))
+                            .append("&bor_library=HZA50");
+                    String parame = sb.toString();
+                    byte[] postParame = parame.getBytes();
+                    //提交请求体
+                    DataOutputStream out = new DataOutputStream(connection1.getOutputStream());
+                    out.write(postParame);
+                    out.flush();
+                    out.close();
+                    String cookieVal = null;
+                    String cookie = null;
+                    String key = null;
+                    int n = 0;
+                    if (connection1.getResponseCode() == 200) {
+                        InputStream in = connection1.getInputStream();
+                        //获取流中的数据
+                        BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+                        StringBuilder response = new StringBuilder();
+                        String line;
+                        while ((line = reader.readLine()) != null) {
+                            response.append(line);
+                        }
 
+                        Document document1 = Jsoup.parse(response.toString());
+                        Element elements1 = document1.getElementById("header");
+                        Elements elements2 = document1.select("td.td2");
+                        if (elements2.size()>1) {
+                            name = elements2.get(1).text();
+                        }
+                        String isLogin = elements1.getElementsByTag("a").first().text();
+                        if (isLogin.equals("退出")) {
+                            //list用来存放各类url
+                            list = new ArrayList<String>();
+                            //获取各类信息网页
+                            //我的图书馆的信息
+                            myLibrary.setMyLibrary(elements1.childNode(5).attr("href"));
+                            list.add(myLibrary.getMyLibrary());
+//                       builder.append(myLibrary.getMyLibrary());
+                            //热门推荐
+                            myLibrary.setHotMessage(elements1.childNode(16).attr("href"));
+                            list.add(myLibrary.getHotMessage());
+//                       builder.append(myLibrary.getHotMessage());
+                            //读者推荐
+                            myLibrary.setReaderRecommend(elements1.childNode(11).attr("href"));
+                            list.add(myLibrary.getReaderRecommend());
+                            //搜索结果
+                            myLibrary.setHistory(elements1.childNode(20).attr("href"));
+                            list.add(myLibrary.getHistory());
+                            //搜索
+                            myLibrary.setSearch(elements1.childNode(3).attr("href"));
+                            list.add(myLibrary.getSearch());
+                            builder.append(myLibrary);
+                            InternetConnection ic = new InternetConnection(myLibrary.getMyLibrary(), path);
+                            Message message = new Message();
+
+                            message.what = SHOW_RESPONSE;
+                            message.obj = ic.getResponse();
+                            handler.sendMessage(message);
+                        }else {
+                            //使用异步消息处理机制传输数据
+                            Message message = new Message();
+
+                            message.what = SHOW_RESPONSE;
+                            message.obj = "-1";
+                            handler.sendMessage(message);
+                        }
+                    }
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }).start();
+    }
+
+    class MainHandler extends Handler {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what){
+                case SHOW_RESPONSE:
+                    String response = (String) msg.obj;
+                    if (!response.equals("-1")) {
+                        search = list.get(4);
+                        myLibrary1 = list.get(0);
+
+                        i = search.length();
+                        str = search.substring(0,i-8);
+
+                        isLogined = true;
+                        Toast.makeText(MainActivity.this, "登陆成功", Toast.LENGTH_SHORT).show();
+                        textView.setText(name);
+                        textView1.setText(pref.getString("account_lib", " "));
+
+                    }else{
+                        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                        builder.setMessage("哎呀~出错啦!");
+                        builder.setMessage("请检查账号和密码后重试");
+                        builder.setCancelable(false);
+                        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                                Toast.makeText(MainActivity.this, "请重新登陆", Toast.LENGTH_SHORT).show();
+                                finish();
+                            }
+                        });
+                        builder.show();
+                    }
+            }
+        }
+    }
 }
