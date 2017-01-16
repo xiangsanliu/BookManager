@@ -44,10 +44,12 @@
             android:name=".Activities.LoginActivity"
             android:label="登陆"
             android:parentActivityName=".Activities.MainActivity" />
-        <activity android:name=".Activities.ShowBookChineseInfo"
-            android:parentActivityName=".Activities.MainActivity"/>
-        <activity android:name=".Activities.ShowBookWesternInfo"
-            android:parentActivityName=".Activities.MainActivity"/>
+        <activity
+            android:name=".Activities.ShowBookChineseInfo"
+            android:parentActivityName=".Activities.MainActivity" />
+        <activity
+            android:name=".Activities.ShowBookWesternInfo"
+            android:parentActivityName=".Activities.MainActivity" />
         <activity
             android:name=".Activities.SouthLakeActivity"
             android:label="南湖跑查询"
@@ -89,8 +91,13 @@
             android:label="新书推荐"
             android:parentActivityName=".Activities.MainActivity" />
         <activity android:name=".Activities.BmobReaderAddBook" />
-        <activity android:name=".Activities.BmobReaderQueryBookActivity"
-            android:parentActivityName=".Activities.MainActivity"></activity>
+        <activity
+            android:name=".Activities.BmobReaderQueryBookActivity"
+            android:parentActivityName=".Activities.MainActivity" />
+        <activity
+            android:label="体育成绩查询"
+            android:parentActivityName=".Activities.MainActivity"
+            android:name=".Activities.PEScoreActivity"></activity>
     </application>
 
 </manifest>

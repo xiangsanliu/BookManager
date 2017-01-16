@@ -212,6 +212,9 @@ public class MainActivity extends BaseActivity
             case R.id.south_lake:
                 startActivity(new Intent(MainActivity.this, SouthLakeActivity.class));
                 break;
+            case R.id.pe_score:
+                startActivity(new Intent(MainActivity.this, PEScoreActivity.class));
+                break;
             case R.id.my_library:
                 if (isLogined) {
                     Intent intent = new Intent(MainActivity.this, MyLibraryActivity.class);

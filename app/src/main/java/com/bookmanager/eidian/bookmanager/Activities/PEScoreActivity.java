@@ -1,15 +1,14 @@
 package com.bookmanager.eidian.bookmanager.Activities;
 
-
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
@@ -18,19 +17,14 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
-
-import com.bookmanager.eidian.bookmanager.Helpers.BaseActivity;
 import com.bookmanager.eidian.bookmanager.R;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
-import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -38,8 +32,8 @@ import java.net.URLEncoder;
 
 import at.markushi.ui.CircleButton;
 
+public class PEScoreActivity extends AppCompatActivity implements View.OnClickListener{
 
-public class SouthLakeActivity extends BaseActivity implements View.OnClickListener {
     public static final int SHOW_RESPONSE = 0;
 
     private SharedPreferences pref;
@@ -59,14 +53,14 @@ public class SouthLakeActivity extends BaseActivity implements View.OnClickListe
         public void handleMessage(Message msg){
             switch (msg.what){
                 case SHOW_RESPONSE:
-                    Toast.makeText(SouthLakeActivity.this, "查询成功", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(PEScoreActivity.this, "查询成功", Toast.LENGTH_SHORT).show();
                     String response = (String) msg.obj;
                     if (response.equals("fail")){
-                        Toast.makeText(SouthLakeActivity.this,
+                        Toast.makeText(PEScoreActivity.this,
                                 "查询失败,学号或密码错误",Toast.LENGTH_SHORT).show();
                     }
                     else{
-                        AlertDialog.Builder builder = new AlertDialog.Builder(SouthLakeActivity.this);
+                        AlertDialog.Builder builder = new AlertDialog.Builder(PEScoreActivity.this);
                         builder.setMessage(response)
                                 .setPositiveButton("ok", new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int id) {
@@ -80,9 +74,9 @@ public class SouthLakeActivity extends BaseActivity implements View.OnClickListe
     };
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_south_lake);
+        setContentView(R.layout.activity_pescore);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -110,7 +104,7 @@ public class SouthLakeActivity extends BaseActivity implements View.OnClickListe
 
         InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(passwordEdit.getWindowToken(), 0);
-        Toast.makeText(SouthLakeActivity.this, "查询中...", Toast.LENGTH_SHORT).show();
+        Toast.makeText(PEScoreActivity.this, "查询中...", Toast.LENGTH_SHORT).show();
 
         new Thread(new Runnable() {
             String account = accountEdit.getText().toString();
@@ -147,22 +141,22 @@ public class SouthLakeActivity extends BaseActivity implements View.OnClickListe
                     dos.write(postParame);
                     dos.flush();
                     dos.close();
-                    String cookie = null;
-                    int n=0;
                     if (connection.getResponseCode() == connection.HTTP_OK ) {
-                        cookie = connection.getHeaderField("Set-Cookie");
-                        Document document = Jsoup.connect("http://211.69.129.116:8501/stu/StudentSportModify.do")
-                                .header("Accept","text/html,application/" +
-                                        "xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8")
-                                .header("Accept-Language","zh-CN,zh;q=0.8")
-                                .header("Referer","http://211.69.129.116:8501" +
-                                        "/jsp/menuForwardContent.jsp?url=stu/StudentSportModify.do")
-                                .header("Host","211.69.129.116:8501")
-                                .header("Cookie",cookie)
-                                .get();
-                        Elements element1 = null;
-                        element1 = document.getElementsByClass("fd");
-                        if (element1.size() != 0) {
+                        String cookie = connection.getHeaderField("Set-Cookie");
+                        cookie = cookie.substring(0, cookie.indexOf(';'));
+                        Document document = Jsoup.connect("http://211.69.129.116:8501/stu/viewresult.do")
+                                .header("Cookie", cookie)
+                                .header("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8")
+                                .header("Connection", "keep-alive")
+                                .header("Host", "211.69.129.116:8501")
+                                .header("Referer", "http://211.69.129.116:8501/jsp/menuForwardContent.jsp?url=stu/viewresult.do")
+                                .header("User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36")
+                                .header("Accept-Encoding", "gzip, deflate, sdch")
+                                .header("Cache-Control", "max-age=0")
+                                .header("Accept-Language", "zh-CN,zh;q=0.8,en;q=0.6")
+                                .header("Upgrade-Insecure-Requests", "1").get();
+                        Elements elements = document.getElementsByClass("fd");
+                        if (elements.size() != 0) {
                             //实现记住密码
                             editor = pref.edit();
                             if (rememberPass.isChecked()){
@@ -174,20 +168,17 @@ public class SouthLakeActivity extends BaseActivity implements View.OnClickListe
                             }
                             editor.commit();
                             //从节点中取出所需数据
-                            String id = element1.get(1).text();
-                            datas.append("学号 : " + id);
-                            datas.append("\n");
-                            String name = element1.get(2).text();
-                            datas.append("姓名 : " + name.toString());
-                            datas.append("\n");
-                            //如果一圈也没完成
-                            String score = null;
-                            if (element1.size() == 10) {
-                                score = element1.get(7).text();
+                            if (elements.size() != 0) {
+                                //从节点中取出所需数据
+                                datas.append("姓名     :  " + elements.get(0).text() + "\n");
+                                datas.append("学号     :  " + elements.get(2).text() + "\n");
+                                datas.append("班级     :  " + elements.get(3).text() + "\n");
+                                datas.append("体育班 :" + "\t" + elements.get(6).text() + "\n");
+                                datas.append("教师     :  " + elements.get(7).text() + "\n");
+                                datas.append("成绩     :  " + elements.get(9).text() + "\n");
                             }else {
-                                score = "0";
+                                datas.append("fail");
                             }
-                            datas.append("已完成圈数 : " + score);
                         }else {
                             datas.append("fail");
                         }

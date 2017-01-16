@@ -25,6 +25,10 @@
                 android:icon="@drawable/ic_directions_run_black_24dp"
                 android:title="南湖跑查询"/>
             <item
+                android:id="@+id/pe_score"
+                android:icon="@drawable/ic_assignment_ind_black_24dp"
+                android:title="体育成绩查询"/>
+            <item
                 android:id="@+id/help_each_other"
                 android:icon="@drawable/ic_autorenew_black_24dp"
                 android:title="图书互借"/>
