@@ -29,14 +29,26 @@
                 android:icon="@drawable/ic_assignment_ind_black_24dp"
                 android:title="体育成绩查询"/>
             <item
+                android:id="@+id/course"
+                android:icon="@drawable/ic_today_black_24dp"
+                android:title="课程表"/>
+            <item
+                android:id="@+id/exam_query"
+                android:icon="@drawable/ic_description_black_24dp"
+                android:title="考试查询"/>
+            <item
                 android:id="@+id/help_each_other"
                 android:icon="@drawable/ic_autorenew_black_24dp"
                 android:title="图书互借"/>
         </menu>
     </item>
 
-    <item android:title="关于">
+    <item android:title="设置">
         <menu>
+            <item
+                android:id="@+id/account_setting"
+                android:icon="@drawable/ic_settings_black_24dp"
+                android:title="账号设置"/>
             <item
                 android:id="@+id/feed_back"
                 android:icon="@drawable/ic_feedback_black_24dp"

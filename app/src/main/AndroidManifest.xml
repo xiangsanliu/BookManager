@@ -41,19 +41,11 @@
             android:parentActivityName=".Activities.MainActivity"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".Activities.LoginActivity"
-            android:label="登陆"
-            android:parentActivityName=".Activities.MainActivity" />
-        <activity
             android:name=".Activities.ShowBookChineseInfo"
             android:parentActivityName=".Activities.MainActivity" />
         <activity
             android:name=".Activities.ShowBookWesternInfo"
             android:parentActivityName=".Activities.MainActivity" />
-        <activity
-            android:name=".Activities.SouthLakeActivity"
-            android:label="南湖跑查询"
-            android:parentActivityName=".Activities.SouthLakeActivity" />
         <activity
             android:name=".Activities.MyLibraryContent"
             android:label="书籍列表"
@@ -95,9 +87,10 @@
             android:name=".Activities.BmobReaderQueryBookActivity"
             android:parentActivityName=".Activities.MainActivity" />
         <activity
-            android:label="体育成绩查询"
-            android:parentActivityName=".Activities.MainActivity"
-            android:name=".Activities.PEScoreActivity"></activity>
+            android:name=".Activities.SetAccountActivity"
+            android:label="设置账号" />
+        <activity android:name=".Activities.ExamPlanActivity" />
+        <activity android:name=".Activities.CourseActivity"></activity>
     </application>
 
 </manifest>

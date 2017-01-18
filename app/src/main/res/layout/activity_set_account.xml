@@ -6,7 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -23,14 +22,14 @@
             app:popupTheme="@style/AppTheme.PopupOverlay" />
 
     </android.support.design.widget.AppBarLayout>
-
     <LinearLayout
         android:paddingTop="64dp"
-        android:paddingLeft="32dp"
-        android:paddingRight="32dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
+
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             app:counterEnabled="true"
@@ -38,53 +37,57 @@
             android:layout_height="wrap_content">
             <EditText
                 android:hint="在这里输入学号"
-                android:textSize="25dp"
+                android:textSize="20dp"
+                android:layout_width="match_parent"
+                android:maxLength="13"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:id="@+id/account"/>
+        </android.support.design.widget.TextInputLayout>
+
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <EditText
+                android:inputType="textPassword"
+                android:hint="教务系统密码"
+                android:textSize="20dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:singleLine="true"
-                android:id="@+id/input_account"/>
+                android:id="@+id/password_jw" />
         </android.support.design.widget.TextInputLayout>
 
-        <LinearLayout
+        <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
-            android:orientation="horizontal"
             android:layout_height="wrap_content">
-            <android.support.design.widget.TextInputLayout
+            <EditText
+                android:inputType="textPassword"
+                android:hint="图书馆密码，默认密码为学号"
+                android:textSize="20dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <EditText
-                    android:inputType="textPassword"
-                    android:hint="默认密码为6个8"
-                    android:textSize="25dp"
-                    android:singleLine="true"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/input_password" />
-            </android.support.design.widget.TextInputLayout>
-        </LinearLayout>
-
-        <LinearLayout
-            android:paddingTop="16dp"
-            android:paddingBottom="16dp"
-            android:layout_gravity="center"
-            android:orientation="horizontal"
-            android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:id="@+id/password_lib" />
+        </android.support.design.widget.TextInputLayout>
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content">
+            <EditText
+                android:inputType="textPassword"
+                android:hint="体育系统密码，默认密码为6个8"
+                android:textSize="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:id="@+id/password_pe" />
+        </android.support.design.widget.TextInputLayout>
 
-            <android.support.v7.widget.AppCompatCheckBox
-                android:id="@+id/remember_pass"
-                android:layout_gravity="center"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-            <TextView
-                android:text="记住密码"
-                android:layout_gravity="center"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
+
 
         <at.markushi.ui.CircleButton
-            android:id="@+id/login_button"
+            android:id="@+id/save"
             android:layout_gravity="center_horizontal"
             android:layout_width="64dip"
             android:layout_height="64dip"

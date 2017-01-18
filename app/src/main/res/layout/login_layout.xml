@@ -5,8 +5,7 @@
     android:id="@+id/activity_south_lake"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="com.bookmanager.eidian.bookmanager.Activities.LoginActivity">
+    android:orientation="vertical">
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -23,71 +22,77 @@
             app:popupTheme="@style/AppTheme.PopupOverlay" />
 
     </android.support.design.widget.AppBarLayout>
-
-    <android.support.design.widget.TextInputLayout
-        android:layout_width="match_parent"
-        app:counterEnabled="true"
-        app:counterMaxLength="13"
-        android:layout_height="wrap_content">
-        <EditText
-            android:hint="在这里输入学号"
-            android:textSize="25dp"
-            android:layout_width="match_parent"
-            android:maxLength="13"
-            android:layout_height="wrap_content"
-            android:singleLine="true"
-            android:id="@+id/account"/>
-    </android.support.design.widget.TextInputLayout>
-
-    <android.support.design.widget.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <EditText
-            android:inputType="textPassword"
-            android:hint="默认密码为学号"
-            android:textSize="25dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:singleLine="true"
-            android:id="@+id/password" />
-    </android.support.design.widget.TextInputLayout>
-
-
     <LinearLayout
-        android:layout_gravity="center"
-        android:orientation="horizontal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:paddingTop="64dp"
+        android:paddingLeft="32dp"
+        android:paddingRight="32dp"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            app:counterEnabled="true"
+            app:counterMaxLength="13"
+            android:layout_height="wrap_content">
+            <EditText
+                android:hint="在这里输入学号"
+                android:textSize="25dp"
+                android:layout_width="match_parent"
+                android:maxLength="13"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:id="@+id/account"/>
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <EditText
+                android:inputType="textPassword"
+                android:hint="默认密码为学号"
+                android:textSize="25dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:id="@+id/password" />
+        </android.support.design.widget.TextInputLayout>
+
 
         <LinearLayout
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
+            android:layout_gravity="center"
             android:orientation="horizontal"
-            android:layout_width="0dp"
-            android:layout_weight="1"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content">
-            <android.support.v7.widget.AppCompatCheckBox
-                android:id="@+id/remember_passward"
-                android:layout_gravity="center_vertical"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-            <TextView
-                android:layout_gravity="center_vertical"
-                android:text="自动登陆"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content">
+                <android.support.v7.widget.AppCompatCheckBox
+                    android:id="@+id/remember_passward"
+                    android:layout_gravity="center_vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:layout_gravity="center_vertical"
+                    android:text="自动登陆"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
         </LinearLayout>
-
+        <at.markushi.ui.CircleButton
+            android:id="@+id/login_button"
+            android:layout_gravity="center_horizontal"
+            android:layout_width="64dip"
+            android:layout_height="64dip"
+            android:src="@drawable/ic_check_white_24dp"
+            app:cb_color="#99CC00"
+            app:cb_pressedRingWidth="8dip" />
     </LinearLayout>
-
-
-
-
-    <at.markushi.ui.CircleButton
-        android:id="@+id/login_button"
-        android:layout_gravity="center_horizontal"
-        android:layout_width="64dip"
-        android:layout_height="64dip"
-        android:src="@drawable/ic_check_white_24dp"
-        app:cb_color="#99CC00"
-        app:cb_pressedRingWidth="8dip" />
 
 </LinearLayout>

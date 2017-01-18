@@ -1,12 +1,12 @@
 package com.bookmanager.eidian.bookmanager.Activities;
 
-import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.content.Context;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -19,26 +19,31 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bookmanager.eidian.bookmanager.Adapters.MyViewPagerAdapter;
 import com.bookmanager.eidian.bookmanager.DialogFragments.FeedBackDialogFragment;
 import com.bookmanager.eidian.bookmanager.DialogFragments.InfoDialogFragment;
+import com.bookmanager.eidian.bookmanager.DialogFragments.SouthLakeDialogFragment;
 import com.bookmanager.eidian.bookmanager.Fragments.HomePageFragments.ActivityForecastFragment;
 import com.bookmanager.eidian.bookmanager.Fragments.HomePageFragments.NewsFragment;
 import com.bookmanager.eidian.bookmanager.Fragments.HomePageFragments.NoticeFragment;
-import com.bookmanager.eidian.bookmanager.Fragments.SearchBookFragment;
 import com.bookmanager.eidian.bookmanager.Helpers.ActivityCollector;
 import com.bookmanager.eidian.bookmanager.Helpers.BaseActivity;
 import com.bookmanager.eidian.bookmanager.Helpers.InternetConnection;
+import com.bookmanager.eidian.bookmanager.Helpers.JWGetter;
+import com.bookmanager.eidian.bookmanager.Helpers.LibraryGetter;
 import com.bookmanager.eidian.bookmanager.Helpers.LibraryList;
+import com.bookmanager.eidian.bookmanager.Helpers.PEGetter;
 import com.bookmanager.eidian.bookmanager.R;
 
 import org.jsoup.Jsoup;
@@ -58,24 +63,23 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
+import okhttp3.OkHttpClient;
+
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    private boolean isLogined = false;
+    private final String TAG = "MainActivity";
     private String search;
     private List<String> list;
-    private String myLibrary1;
+    private String myLibraryUrl;
     private String str;
     private SharedPreferences pref;
-    private LibraryList myLibrary = new LibraryList();
-    private StringBuilder builder = new StringBuilder();
     static final int SHOW_RESPONSE = 0;
-    Boolean isAutoLogin = false;
     String name;
     private TextView textView;
     private TextView textView1;
     int i ;
-
+    String account;
     private Handler handler = new MainHandler();
 
     Toolbar toolbar;
@@ -84,26 +88,24 @@ public class MainActivity extends BaseActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        Intent intent = getIntent();
-        isLogined = intent.getBooleanExtra("isLogined", false);
-
         pref = PreferenceManager.getDefaultSharedPreferences(this);
-        final String account = pref.getString("account_lib", " ");
-        final String password = pref.getString("password_lib", " ");
-        if ( (!account.equals(" ")) && (!password.equals(" ")) ){
-            isAutoLogin = true;
-            loginIn(account, password);
+        account = pref.getString("account", "");
+        final String password = pref.getString("password_lib", "");
+        if ( account.equals("")) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this)
+                    .setTitle("提示")
+                    .setMessage("还未设置账号, 请先设置账号")
+                    .setPositiveButton("设置账号", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            startActivity(new Intent(MainActivity.this, SetAccountActivity.class));
+                            finish();
+                        }
+                    });
+            builder.create().show();
+        } else {
+            login(account, password);
         }
-        if (isLogined && !isAutoLogin) {
-            search = intent.getStringExtra("search");
-            myLibrary1 = intent.getStringExtra("myLibrary");
-            String hotMessage = intent.getStringExtra("hotMessage");
-            //获取相同的参数
-            i = search.length();
-            str = search.substring(0,i-8);
-        }
-
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -119,32 +121,6 @@ public class MainActivity extends BaseActivity
         View view = navigationView.inflateHeaderView(R.layout.nav_header_main);
         textView = (TextView) view.findViewById(R.id.name);
         textView1 = (TextView) view.findViewById(R.id.studentNumber);
-        view.findViewById(R.id.imageView).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (isLogined){
-                    android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(MainActivity.this);
-                    builder.setMessage("您已登陆，确定要退出吗")
-                            .setPositiveButton("退出", new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
-                                    startActivity(new Intent(MainActivity.this, LoginActivity.class));
-                                    finish();
-                                }
-                            })
-                            .setTitle("提示")
-                            .setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-
-                                }
-                            });
-                    builder.create().show();
-                } else {
-                    startActivity(new Intent(MainActivity.this, LoginActivity.class));
-                    finish();
-                }
-            }
-        });
         initViewPagerHomePage();
     }
 
@@ -172,89 +148,54 @@ public class MainActivity extends BaseActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        ActionBar actionBar = getSupportActionBar();        //得到actionBar的对象，以更改 Toolbar上的Title
-
-        FragmentManager fragmentManager = getFragmentManager();
+        final ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("查询中");
+        progressDialog.create();
+        final FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         int id = item.getItemId();
         switch (id) {
             case R.id.imageView:
                 break;
             case R.id.book_search:
-                if (isLogined) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                    builder.setMessage("请选择需要搜索的方式")
-                            .setPositiveButton("中文搜索", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    Intent intent = new Intent(MainActivity.this, SearchBookActivity.class);
-                                    intent.putExtra("search_extra", search);
-                                    intent.putExtra("isChinese", true);
-                                    startActivity(intent);
-                                }
-                            })
-                            .setNegativeButton("英文搜索", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    Intent intent = new Intent(MainActivity.this, SearchBookActivity.class);
-                                    intent.putExtra("search_extra", search);
-                                    intent.putExtra("isChinese", false);
-                                    startActivity(intent);
-                                }
-                            });
-                    builder.create().show();
-                } else {
-                    startActivity(new Intent(MainActivity.this, LoginActivity.class));
-                    Toast.makeText(this, "请先登陆", Toast.LENGTH_SHORT).show();
-                    finish();
-                }
+                onClickSearchbook();
                 break;
             case R.id.south_lake:
-                startActivity(new Intent(MainActivity.this, SouthLakeActivity.class));
+                onClickSouthLake(progressDialog);
                 break;
-            case R.id.pe_score:
-                startActivity(new Intent(MainActivity.this, PEScoreActivity.class));
+            case R.id.pe_score:;
+                onClickPeScore(progressDialog);
                 break;
             case R.id.my_library:
-                if (isLogined) {
-                    Intent intent = new Intent(MainActivity.this, MyLibraryActivity.class);
-                    intent.putExtra("str", str);
-                    intent.putExtra("myLibrary", myLibrary1);
-                    startActivity(intent);
-                } else {
-                    startActivity(new Intent(MainActivity.this, LoginActivity.class));
-                    Toast.makeText(this, "请先登陆", Toast.LENGTH_SHORT).show();
-                    finish();
-                }
+                onClickMyLibrary();
                 break;
             case R.id.recommend:
-                Intent intent = new Intent(MainActivity.this, RecommendActivity.class);
-                intent.putExtra("str", str);
-                startActivity(intent);
+                onClickRecomment(str);
                 break;
             case R.id.rank:
                 startActivity(new Intent(MainActivity.this, RankActivity.class));
                 break;
             case R.id.info:
                 InfoDialogFragment infoDialogFragment = new InfoDialogFragment();
-                infoDialogFragment.show(fragmentManager, "MainActivity");
+                infoDialogFragment.show(fragmentManager, TAG);
                 break;
             case R.id.feed_back:
                 FeedBackDialogFragment feedBackDialogFragment = new FeedBackDialogFragment();
-                feedBackDialogFragment.show(fragmentManager, "MainActivity");
+                feedBackDialogFragment.show(fragmentManager, TAG);
+                break;
+            case R.id.account_setting:
+                startActivity(new Intent(MainActivity.this, SetAccountActivity.class));
+                finish();
                 break;
             case R.id.help_each_other:
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setTitle("提示")
-                        .setMessage("模块正在加紧开发中，敬请期待！")
-                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-
-                            }
-                        }).create();
-                builder.show();
+                funDeveloping();
                 //startActivity(new Intent(MainActivity.this,BmobReaderQueryBookActivity.class));
+                break;
+            case R.id.course:
+                onClickCourse();
+                break;
+            case R.id.exam_query:
+                funDeveloping();
                 break;
         }
         invalidateOptionsMenu();
@@ -274,101 +215,27 @@ public class MainActivity extends BaseActivity
         tabLayout.setupWithViewPager(viewPager);
     }
 
-    private void loginIn(final String account, final String password) {
+    private void login(final String account, final String password) {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                Document document = null;
                 try {
-                    document =  Jsoup.connect("http://211.69.140.4:8991/F").get();
-                    Elements elements = document.getElementsByTag("a");
-                    Node mNode = elements.first();
-                    String path = mNode.attr("href");
-                    myLibrary.setMyLogin(elements.first().attr("href"));
-                    URL url1 = new URL(path);
-                    HttpURLConnection connection1 = (HttpURLConnection) url1.openConnection();
-                    connection1.setConnectTimeout(8000);
-                    connection1.setRequestProperty("Accept", "text/html," +
-                            "application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
-                    connection1.setRequestProperty("Referer", path);
-                    connection1.setRequestProperty("User-Agent", "Mozilla/5.0 " +
-                            "(Windows NT 10.0; WOW64; rv:48.0) Gecko/20100101 Firefox/48.0");
-                    connection1.setRequestProperty("Host", "211.69.140.4:8991");
-                    connection1.setRequestProperty("Cache-Control", "no-cache, no-store, must-revalidate");
-                    connection1.setRequestProperty("Upgrade-Insecure-Requests", "1");
-                    connection1.setRequestMethod("POST");
-                    //设置请求体
-                    StringBuilder sb = new StringBuilder();
-                    sb.append("func=login-session")
-                            .append("&login_source=bor-info")
-                            .append("&bor_id=" + URLEncoder.encode(account, "UTF-8"))
-                            .append("&bor_verification=" + URLEncoder.encode(password, "UTF-8"))
-                            .append("&bor_library=HZA50");
-                    String parame = sb.toString();
-                    byte[] postParame = parame.getBytes();
-                    //提交请求体
-                    DataOutputStream out = new DataOutputStream(connection1.getOutputStream());
-                    out.write(postParame);
-                    out.flush();
-                    out.close();
-                    String cookieVal = null;
-                    String cookie = null;
-                    String key = null;
-                    int n = 0;
-                    if (connection1.getResponseCode() == 200) {
-                        InputStream in = connection1.getInputStream();
-                        //获取流中的数据
-                        BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-                        StringBuilder response = new StringBuilder();
-                        String line;
-                        while ((line = reader.readLine()) != null) {
-                            response.append(line);
-                        }
-
-                        Document document1 = Jsoup.parse(response.toString());
-                        Element elements1 = document1.getElementById("header");
-                        Elements elements2 = document1.select("td.td2");
-                        if (elements2.size()>1) {
-                            name = elements2.get(1).text();
-                        }
-                        String isLogin = elements1.getElementsByTag("a").first().text();
-                        if (isLogin.equals("退出")) {
-                            //list用来存放各类url
-                            list = new ArrayList<String>();
-                            //获取各类信息网页
-                            //我的图书馆的信息
-                            myLibrary.setMyLibrary(elements1.childNode(5).attr("href"));
-                            list.add(myLibrary.getMyLibrary());
-//                       builder.append(myLibrary.getMyLibrary());
-                            //热门推荐
-                            myLibrary.setHotMessage(elements1.childNode(16).attr("href"));
-                            list.add(myLibrary.getHotMessage());
-//                       builder.append(myLibrary.getHotMessage());
-                            //读者推荐
-                            myLibrary.setReaderRecommend(elements1.childNode(11).attr("href"));
-                            list.add(myLibrary.getReaderRecommend());
-                            //搜索结果
-                            myLibrary.setHistory(elements1.childNode(20).attr("href"));
-                            list.add(myLibrary.getHistory());
-                            //搜索
-                            myLibrary.setSearch(elements1.childNode(3).attr("href"));
-                            list.add(myLibrary.getSearch());
-                            builder.append(myLibrary);
-                            InternetConnection ic = new InternetConnection(myLibrary.getMyLibrary(), path);
-                            Message message = new Message();
-
-                            message.what = SHOW_RESPONSE;
-                            message.obj = ic.getResponse();
-                            handler.sendMessage(message);
-                        }else {
-                            //使用异步消息处理机制传输数据
-                            Message message = new Message();
-
-                            message.what = SHOW_RESPONSE;
-                            message.obj = "-1";
-                            handler.sendMessage(message);
-                        }
+                    list = LibraryGetter.getLoginUrl(account, password);
+                    if (list != null) {
+                        name = list.get(6);
+                        InternetConnection ic = new InternetConnection(list.get(0), list.get(5));
+                        Message message = new Message();
+                        message.what = SHOW_RESPONSE;
+                        message.obj = ic.getResponse();
+                        handler.sendMessage(message);
+                    }else {
+                        //使用异步消息处理机制传输数据
+                        Message message = new Message();
+                        message.what = SHOW_RESPONSE;
+                        message.obj = "-1";
+                        handler.sendMessage(message);
                     }
+
 
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -386,26 +253,23 @@ public class MainActivity extends BaseActivity
                     String response = (String) msg.obj;
                     if (!response.equals("-1")) {
                         search = list.get(4);
-                        myLibrary1 = list.get(0);
-
+                        myLibraryUrl = list.get(0);
                         i = search.length();
                         str = search.substring(0,i-8);
-
-                        isLogined = true;
                         Toast.makeText(MainActivity.this, "登陆成功", Toast.LENGTH_SHORT).show();
                         textView.setText(name);
-                        textView1.setText(pref.getString("account_lib", " "));
+                        textView1.setText(pref.getString("account", ""));
 
                     }else{
                         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                        builder.setMessage("哎呀~出错啦!");
+                        builder.setTitle("登陆图书馆失败");
                         builder.setMessage("请检查账号和密码后重试");
                         builder.setCancelable(false);
-                        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        builder.setPositiveButton("检查账号", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                startActivity(new Intent(MainActivity.this, LoginActivity.class));
-                                Toast.makeText(MainActivity.this, "请重新登陆", Toast.LENGTH_SHORT).show();
+                                startActivity(new Intent(MainActivity.this, SetAccountActivity.class));
+                                Toast.makeText(MainActivity.this, "请检查账号和密码", Toast.LENGTH_SHORT).show();
                                 finish();
                             }
                         });
@@ -413,5 +277,177 @@ public class MainActivity extends BaseActivity
                     }
             }
         }
+    }
+    private void onClickSearchbook() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        builder.setMessage("请选择需要搜索的方式")
+                .setPositiveButton("中文搜索", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {Intent intent = new Intent(MainActivity.this, SearchBookActivity.class);
+                        intent.putExtra("search_extra", search);
+                        intent.putExtra("isChinese", true);
+                        startActivity(intent);
+                    }
+                })
+                .setNegativeButton("英文搜索", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {Intent intent = new Intent(MainActivity.this, SearchBookActivity.class);
+                        intent.putExtra("search_extra", search);
+                        intent.putExtra("isChinese", false);
+                        startActivity(intent);
+                    }
+                });
+        builder.create().show();
+    }
+    private void onClickCourse() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    final Bitmap bitmap = JWGetter.getCodeBitmap();
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            View view = LayoutInflater.from(MainActivity.this)
+                                    .inflate(R.layout.code_dialog, null);
+                            final EditText editText = (EditText) view.findViewById(R.id.code_edit);
+                            ImageView imageView = (ImageView) view.findViewById(R.id.code_image);
+                            imageView.setImageBitmap(bitmap);
+                            AlertDialog.Builder jwCode = new AlertDialog.Builder(MainActivity.this)
+                                    .setTitle("请输入验证码")
+                                    .setView(view);
+                            jwCode.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+
+                                }
+                            });
+                            jwCode.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    final String password = pref.getString("password_jw", "");
+                                    final String code = editText.getText().toString();
+                                    Intent intent = new Intent(MainActivity.this, CourseActivity.class);
+                                    intent.putExtra("account", account);
+                                    intent.putExtra("password", password);
+                                    intent.putExtra("code", code);
+                                    startActivity(intent);
+                                }
+                            });
+                            jwCode.create().show();
+                        }
+                    });
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+    private void onClickSouthLake(final ProgressDialog progressDialog) {
+        progressDialog.show();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    String pePassword = pref.getString("password_pe", "");
+                    final String result = PEGetter.getSouthLake(account, pePassword);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            progressDialog.dismiss();
+                            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                            if (result.equals("fail")) {
+                                builder.setMessage("查询失败, 请检查账号、密码或网络连接")
+                                        .setTitle("查询失败")
+                                        .setPositiveButton("设置账号", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                startActivity(new Intent(MainActivity.this, SetAccountActivity.class));
+                                                finish();
+                                            }
+                                        });
+                            } else {
+                                builder.setMessage(result)
+                                        .setTitle("查询成功")
+                                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+
+                                            }
+                                        });
+                            }
+                            builder.create().show();
+                        }
+                    });
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+    private void onClickPeScore(final ProgressDialog progressDialog) {
+        progressDialog.show();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    String pePassword = pref.getString("password_pe", "");
+                    final String result = PEGetter.getPEScore(account, pePassword);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            progressDialog.dismiss();
+                            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                            if (result.equals("fail")) {
+                                builder.setMessage("查询失败, 请检查账号、密码或网络连接")
+                                        .setTitle("查询失败")
+                                        .setPositiveButton("设置账号", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                startActivity(new Intent(MainActivity.this, SetAccountActivity.class));
+                                                finish();
+                                            }
+                                        });
+                            } else {
+                                builder.setMessage(result)
+                                        .setTitle("查询成功")
+                                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+
+                                            }
+                                        });
+                            }
+                            builder.create().show();
+                        }
+                    });
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+    private void funDeveloping() {
+        AlertDialog.Builder helpEachOtherDialog = new AlertDialog.Builder(this);
+        helpEachOtherDialog.setTitle("提示")
+                .setMessage("模块正在加紧开发中，敬请期待！")
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                }).create();
+        helpEachOtherDialog.show();
+    }
+    private void onClickMyLibrary() {
+        Intent myLibraryIntent = new Intent(MainActivity.this, MyLibraryActivity.class);
+        myLibraryIntent.putExtra("str", str);
+        myLibraryIntent.putExtra("myLibrary", list.get(0));
+        startActivity(myLibraryIntent);
+    }
+    private void onClickRecomment(String str) {
+        Intent recommectIntent = new Intent(MainActivity.this, RecommendActivity.class);
+        recommectIntent.putExtra("str", str);
+        startActivity(recommectIntent);
     }
 }

@@ -53,18 +53,6 @@ public class RecommendActivity extends AppCompatActivity {
                     Object responseNew = msg.obj;
                     hAdapter = new HotMessageAdapter((List<HotMsg>) responseNew);
                     hotmsgView.setAdapter(hAdapter);
-//                    hotmsgView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//                        @Override
-//                        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-//                            HotMsg hotMsg = hotMsgList.get(i);
-//                            String path = str+"find-b&find_code=SYS&local_base=HZA01&request="+
-//                                    hotMsg.getBookMessageUrl()+"&con_lng=chi";
-//                            Intent intent = new Intent(RecommendActivity.this,Show_new_book_message.class);
-//                            intent.putExtra("pathUrl",path);
-//
-//                            startActivity(intent);
-//                        }
-//                    });
                     break;
                 case 2:
                     hAdapter.notifyDataSetChanged();
@@ -79,9 +67,7 @@ public class RecommendActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recommend);
-
         hotmsgView = (RecyclerView) findViewById(R.id.show_hotmessage);
-
         hotmsgView.setLayoutManager(new LinearLayoutManager(this));
         hotmsgView.addItemDecoration(new SpacesItemDecoration(1));
         materialRefreshLayout = (MaterialRefreshLayout) findViewById(R.id.swipe_to_refresh);
@@ -90,8 +76,6 @@ public class RecommendActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -143,8 +127,6 @@ public class RecommendActivity extends AppCompatActivity {
                 }
             }
         }).start();
-
-
         materialRefreshLayout.setLoadMore(true);
         materialRefreshLayout.setMaterialRefreshListener(new MaterialRefreshListener() {
 

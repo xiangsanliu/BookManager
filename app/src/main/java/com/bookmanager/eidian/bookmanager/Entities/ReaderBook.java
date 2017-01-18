@@ -1,6 +1,6 @@
 package com.bookmanager.eidian.bookmanager.Entities;
 
-import cn.bmob.v3.BmobObject;
+//import cn.bmob.v3.BmobObject;
 
 /**
  *
@@ -8,7 +8,7 @@ import cn.bmob.v3.BmobObject;
  * Created by clmiberf on 2016/10/23.
  */
 
-public class ReaderBook extends BmobObject{
+public class ReaderBook /*extends BmobObject*/{
 
     private String bName;
 
