@@ -36,7 +36,12 @@ public class LibraryGetter {
 
 
     private static void setLoginUrl() throws IOException {
-        Document document = Jsoup.connect(MAIN_URL).get();
+        client = new OkHttpClient();
+        Request request = new Request.Builder()
+                .url(MAIN_URL)
+                .build();
+        Response  response = client.newCall(request).execute();
+        Document document = Jsoup.parse(response.body().string());
         Elements elements = document.getElementsByTag("a");
         libraryUrl.setMyLogin(elements.first().attr("href"));
         loginUrl = elements.first().attr("href");
@@ -44,7 +49,6 @@ public class LibraryGetter {
 
     public static List getLoginUrl(String account, String password) throws IOException {
         setLoginUrl();
-        client = new OkHttpClient();
         FormBody body = new FormBody.Builder()
                 .add("func", "login-session")
                 .add("login_source", "bor-info")

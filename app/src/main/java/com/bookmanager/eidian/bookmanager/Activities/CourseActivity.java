@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Button;
 
 import com.bookmanager.eidian.bookmanager.Helpers.JWGetter;
 import com.bookmanager.eidian.bookmanager.Helpers.PEGetter;
@@ -24,7 +25,7 @@ import okhttp3.Response;
 public class CourseActivity extends AppCompatActivity {
 
     String account, password, code;
-    Elements courseElements;
+    Button button[][] = new Button[5][7];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,14 +39,7 @@ public class CourseActivity extends AppCompatActivity {
             @Override
             public void run() {
                 try {
-                    courseElements = JWGetter.getCourse(account, password, code);
-//                    for (int i=0; i<6; i++) {
-//                        for (int j=0; j<7; j++) {
-//                            if (course != null) {
-//                                Log.d("course" + i + j, course[i][j]);
-//                            }
-//                        }
-//                    }
+                    JWGetter.setCourse(account, password, code, CourseActivity.this);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

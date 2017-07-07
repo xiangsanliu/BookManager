@@ -42,28 +42,10 @@ import com.bookmanager.eidian.bookmanager.Helpers.BaseActivity;
 import com.bookmanager.eidian.bookmanager.Helpers.InternetConnection;
 import com.bookmanager.eidian.bookmanager.Helpers.JWGetter;
 import com.bookmanager.eidian.bookmanager.Helpers.LibraryGetter;
-import com.bookmanager.eidian.bookmanager.Helpers.LibraryList;
 import com.bookmanager.eidian.bookmanager.Helpers.PEGetter;
 import com.bookmanager.eidian.bookmanager.R;
-
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.nodes.Node;
-import org.jsoup.select.Elements;
-
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLEncoder;
-import java.util.ArrayList;
 import java.util.List;
-
-import okhttp3.OkHttpClient;
 
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -71,7 +53,6 @@ public class MainActivity extends BaseActivity
     private final String TAG = "MainActivity";
     private String search;
     private List<String> list;
-    private String myLibraryUrl;
     private String str;
     private SharedPreferences pref;
     static final int SHOW_RESPONSE = 0;
@@ -192,7 +173,8 @@ public class MainActivity extends BaseActivity
                 //startActivity(new Intent(MainActivity.this,BmobReaderQueryBookActivity.class));
                 break;
             case R.id.course:
-                onClickCourse();
+//                onClickCourse();
+                funDeveloping();
                 break;
             case R.id.exam_query:
                 funDeveloping();
@@ -253,7 +235,6 @@ public class MainActivity extends BaseActivity
                     String response = (String) msg.obj;
                     if (!response.equals("-1")) {
                         search = list.get(4);
-                        myLibraryUrl = list.get(0);
                         i = search.length();
                         str = search.substring(0,i-8);
                         Toast.makeText(MainActivity.this, "登陆成功", Toast.LENGTH_SHORT).show();
@@ -345,11 +326,11 @@ public class MainActivity extends BaseActivity
     }
     private void onClickSouthLake(final ProgressDialog progressDialog) {
         progressDialog.show();
+        final String pePassword = pref.getString("password_pe", "");
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
-                    String pePassword = pref.getString("password_pe", "");
                     final String result = PEGetter.getSouthLake(account, pePassword);
                     runOnUiThread(new Runnable() {
                         @Override
